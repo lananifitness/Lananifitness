@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reto Vuelvo a Moverme · La Nani Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink:      #E8305A;
+    --pink-dark: #C0224A;
+    --pink-soft: #F2607A;
+    --orange:    #F07A30;
+    --gold:      #F5A623;
+    --cream:     #FFF8F5;
+    --warm:      #FFF0EA;
+    --deep:      #1A0A10;
+    --text:      #2D1520;
+    --muted:     #8A5A68;
+    --border:    #F2D5DC;
+    --green:     #3DAA6A;
+  }
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+font-family: ‘Nunito’, sans-serif;
+background: #FFF8F5;
+color: #2D1520;
+overflow-x: hidden;
+}
+
+/* ─── BARRA URGENCIA ─── */
+.urgency-bar {
+background: #1A0A10;
+color: #fff;
+text-align: center;
+padding: 10px 16px;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 0.5px;
+}
+.urgency-bar span { color: #F5A623; }
+
+/* ─── HERO ─── */
+.hero {
+background: linear-gradient(160deg, #C0224A 0%, #E8305A 40%, #F07A30 100%);
+padding: 64px 20px 80px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.hero::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 55%),
+radial-gradient(ellipse at 10% 90%, rgba(0,0,0,0.15) 0%, transparent 50%);
+}
+.hero-logo {
+font-family: ‘Playfair Display’, serif;
+font-size: 15px;
+font-weight: 700;
+color: rgba(255,255,255,0.75);
+letter-spacing: 4px;
+text-transform: uppercase;
+margin-bottom: 28px;
+position: relative;
+}
+.hero-eyebrow {
+display: inline-block;
+background: rgba(255,255,255,0.18);
+border: 1px solid rgba(255,255,255,0.3);
+color: #fff;
+font-size: 12px;
+font-weight: 800;
+letter-spacing: 2.5px;
+text-transform: uppercase;
+padding: 7px 20px;
+border-radius: 50px;
+margin-bottom: 22px;
+position: relative;
+animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(38px, 9vw, 80px);
+font-weight: 900;
+color: #fff;
+line-height: 1.05;
+position: relative;
+animation: fadeUp 0.6s ease 0.1s both;
+margin-bottom: 20px;
+text-shadow: 0 4px 24px rgba(0,0,0,0.2);
+}
+.hero h1 em {
+font-style: italic;
+color: #F5A623;
+display: block;
+}
+.hero-quote {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: clamp(16px, 2.5vw, 20px);
+color: rgba(255,255,255,0.9);
+max-width: 560px;
+margin: 0 auto 36px;
+line-height: 1.6;
+position: relative;
+animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-stats {
+display: flex;
+justify-content: center;
+gap: 0;
+margin-bottom: 40px;
+position: relative;
+animation: fadeUp 0.6s ease 0.25s both;
+flex-wrap: wrap;
+}
+.hstat {
+padding: 18px 32px;
+border-right: 1px solid rgba(255,255,255,0.2);
+text-align: center;
+}
+.hstat:last-child { border-right: none; }
+.hstat-num {
+font-family: ‘Playfair Display’, serif;
+font-size: 42px;
+font-weight: 900;
+color: #fff;
+line-height: 1;
+}
+.hstat-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.hero-cta {
+display: inline-block;
+background: #fff;
+color: #E8305A;
+font-weight: 900;
+font-size: clamp(16px, 2.5vw, 19px);
+padding: 20px 52px;
+border-radius: 60px;
+text-decoration: none;
+box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+position: relative;
+animation: fadeUp 0.6s ease 0.3s both;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.hero-cta:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(0,0,0,0.3); }
+.hero-note {
+color: rgba(255,255,255,0.65);
+font-size: 13px;
+margin-top: 14px;
+position: relative;
+animation: fadeUp 0.6s ease 0.35s both;
+}
+
+/* ─── DOLOR (¿Esto te suena?) ─── */
+.pain-section {
+background: #1A0A10;
+padding: 64px 20px;
+}
+.pain-inner { max-width: 760px; margin: 0 auto; }
+.section-eyebrow {
+display: inline-block;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 2.5px;
+text-transform: uppercase;
+padding: 6px 16px;
+border-radius: 50px;
+margin-bottom: 18px;
+}
+.eyebrow-pink { background: rgba(232,48,90,0.2); color: #F2607A; }
+.eyebrow-dark { background: #FFF0EA; color: #E8305A; }
+.eyebrow-gold { background: rgba(245,166,35,0.15); color: #F5A623; }
+
+.pain-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(28px, 5vw, 44px);
+color: #fff;
+margin-bottom: 32px;
+line-height: 1.2;
+}
+.pain-list { display: flex; flex-direction: column; gap: 14px; }
+.pain-item {
+display: flex;
+align-items: flex-start;
+gap: 16px;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.08);
+border-left: 3px solid #E8305A;
+border-radius: 14px;
+padding: 18px 20px;
+color: rgba(255,255,255,0.85);
+font-size: 16px;
+line-height: 1.5;
+transition: background 0.2s;
+}
+.pain-item:hover { background: rgba(232,48,90,0.1); }
+.pain-dot { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+/* ─── QUÉ INCLUYE ─── */
+.includes-section { padding: 72px 20px; max-width: 900px; margin: 0 auto; }
+.section-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(28px, 5vw, 46px);
+font-weight: 900;
+line-height: 1.15;
+margin-bottom: 12px;
+}
+.section-desc { font-size: 17px; color: #8A5A68; line-height: 1.7; max-width: 580px; margin-bottom: 40px; }
+.includes-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 18px;
+}
+.include-card {
+background: #fff;
+border: 1.5px solid #F2D5DC;
+border-radius: 20px;
+padding: 28px 22px;
+transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.include-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(232,48,90,0.1); border-color: #F2607A; }
+.include-num {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 38px; height: 38px;
+background: linear-gradient(135deg, #E8305A, #F07A30);
+color: #fff;
+font-weight: 900;
+font-size: 15px;
+border-radius: 50%;
+margin-bottom: 14px;
+}
+.include-card.special .include-num { background: linear-gradient(135deg, #F5A623, #F07A30); }
+.include-title { font-weight: 800; font-size: 17px; margin-bottom: 7px; }
+.include-desc { font-size: 14px; color: #8A5A68; line-height: 1.6; }
+.include-tag {
+display: inline-block;
+background: rgba(245,166,35,0.15);
+color: #F07A30;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 3px 10px;
+border-radius: 50px;
+margin-bottom: 10px;
+}
+.why-box {
+margin-top: 28px;
+background: linear-gradient(135deg, #FFF0EA, #FFE8F0);
+border: 1.5px solid #F2D5DC;
+border-radius: 20px;
+padding: 28px 28px;
+display: flex;
+gap: 18px;
+align-items: flex-start;
+}
+.why-icon { font-size: 32px; flex-shrink: 0; }
+.why-text strong { font-size: 16px; display: block; margin-bottom: 6px; color: #E8305A; }
+.why-text { font-size: 15px; color: #2D1520; line-height: 1.6; }
+
+/* ─── CALENDARIO ─── */
+.calendar-section {
+background: #FFF0EA;
+padding: 72px 20px;
+}
+.calendar-inner { max-width: 900px; margin: 0 auto; }
+.week-block { margin-bottom: 40px; }
+.week-header {
+display: flex;
+align-items: center;
+gap: 16px;
+margin-bottom: 18px;
+padding: 16px 24px;
+border-radius: 16px;
+position: relative;
+overflow: hidden;
+}
+.week-1 { background: linear-gradient(135deg, #E8305A, #F07A30); }
+.week-2 { background: linear-gradient(135deg, #C0224A, #E8305A); }
+.week-3 { background: linear-gradient(135deg, #1A0A10, #3D1525); }
+.week-label {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(20px, 3vw, 26px);
+font-weight: 900;
+color: #fff;
+}
+.week-sub { font-size: 14px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+.days-list { display: flex; flex-direction: column; gap: 10px; }
+.day-row {
+background: #fff;
+border-radius: 14px;
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 0;
+overflow: hidden;
+box-shadow: 0 2px 10px rgba(232,48,90,0.06);
+transition: transform 0.2s, box-shadow 0.2s;
+cursor: pointer;
+}
+.day-row:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(232,48,90,0.12); }
+.day-num-col {
+background: linear-gradient(160deg, #E8305A, #C0224A);
+color: #fff;
+font-weight: 900;
+font-size: 16px;
+padding: 18px 14px;
+min-width: 52px;
+text-align: center;
+align-self: stretch;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+gap: 2px;
+}
+.day-num-col small { font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8; }
+.day-row.special .day-num-col { background: linear-gradient(160deg, #F5A623, #F07A30); }
+.day-content { flex: 1; padding: 14px 4px; }
+.day-title { font-weight: 800; font-size: 15px; margin-bottom: 3px; }
+.day-desc { font-size: 13px; color: #8A5A68; }
+.day-time {
+background: #FFF0EA;
+color: #E8305A;
+font-weight: 800;
+font-size: 12px;
+padding: 6px 14px;
+border-radius: 50px;
+margin-right: 14px;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.day-row.special .day-time { background: rgba(245,166,35,0.15); color: #F07A30; }
+
+/* VIDEO EMBED */
+.video-area {
+display: none;
+padding: 0 0 16px 70px;
+animation: fadeUp 0.3s ease both;
+}
+.video-area.open { display: block; }
+.video-wrapper {
+background: #1A0A10;
+border-radius: 14px;
+overflow: hidden;
+aspect-ratio: 16/9;
+position: relative;
+max-width: 560px;
+}
+.video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.video-placeholder {
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: rgba(255,255,255,0.5);
+gap: 12px;
+padding: 20px;
+text-align: center;
+position: absolute;
+inset: 0;
+}
+.video-placeholder .play-btn {
+width: 60px; height: 60px;
+background: rgba(232,48,90,0.3);
+border-radius: 50%;
+border: 2px solid rgba(232,48,90,0.6);
+display: flex; align-items: center; justify-content: center;
+font-size: 24px;
+}
+.video-placeholder p { font-size: 13px; line-height: 1.5; }
+.video-placeholder strong { color: rgba(255,255,255,0.8); }
+
+/* ─── TRANSFORMACIÓN ─── */
+.transform-section { padding: 72px 20px; max-width: 900px; margin: 0 auto; }
+.transform-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+gap: 16px;
+margin-top: 36px;
+}
+.transform-card {
+background: #fff;
+border: 1.5px solid #F2D5DC;
+border-radius: 18px;
+padding: 24px 20px;
+display: flex;
+gap: 14px;
+align-items: flex-start;
+transition: transform 0.2s, border-color 0.2s;
+}
+.transform-card:hover { transform: translateY(-4px); border-color: #F2607A; }
+.t-icon {
+width: 40px; height: 40px; border-radius: 50%;
+background: linear-gradient(135deg, #E8305A, #F07A30);
+display: flex; align-items: center; justify-content: center;
+font-size: 18px;
+flex-shrink: 0;
+}
+.t-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+.t-desc { font-size: 13px; color: #8A5A68; line-height: 1.5; }
+
+/* ─── PRECIO / CTA ─── */
+.price-section {
+background: linear-gradient(160deg, #1A0A10 0%, #3D1525 100%);
+padding: 72px 20px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.price-section::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse at 60% 40%, rgba(232,48,90,0.2) 0%, transparent 60%);
+}
+.price-badge {
+display: inline-block;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: #F5A623;
+background: rgba(245,166,35,0.15);
+border: 1px solid rgba(245,166,35,0.3);
+padding: 7px 18px;
+border-radius: 50px;
+margin-bottom: 24px;
+position: relative;
+}
+.price-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(30px, 6vw, 56px);
+color: #fff;
+line-height: 1.15;
+margin-bottom: 8px;
+position: relative;
+}
+.price-title em { font-style: italic; color: #F5A623; }
+.price-amount {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(60px, 12vw, 100px);
+font-weight: 900;
+color: #fff;
+line-height: 1;
+position: relative;
+margin: 24px 0 4px;
+}
+.price-amount sup { font-size: 40%; vertical-align: super; }
+.price-sub { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 36px; position: relative; }
+.price-features {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 12px;
+margin-bottom: 40px;
+position: relative;
+}
+.pfeat {
+background: rgba(255,255,255,0.08);
+border: 1px solid rgba(255,255,255,0.12);
+color: rgba(255,255,255,0.85);
+font-size: 13px;
+font-weight: 700;
+padding: 8px 18px;
+border-radius: 50px;
+}
+.btn-buy {
+display: inline-block;
+background: linear-gradient(135deg, #E8305A, #C0224A);
+color: #fff;
+font-weight: 900;
+font-size: clamp(16px, 2.5vw, 20px);
+padding: 22px 60px;
+border-radius: 60px;
+text-decoration: none;
+box-shadow: 0 10px 40px rgba(232,48,90,0.4);
+position: relative;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-buy:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(232,48,90,0.5); }
+.price-guarantee {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+margin-top: 20px;
+color: rgba(255,255,255,0.55);
+font-size: 13px;
+position: relative;
+}
+.nani-quote {
+font-family: ‘Playfair Display’, serif;
+font-style: italic;
+font-size: clamp(18px, 3vw, 24px);
+color: rgba(255,255,255,0.8);
+max-width: 560px;
+margin: 48px auto 0;
+line-height: 1.6;
+position: relative;
+}
+.nani-quote cite { display: block; font-style: normal; font-size: 14px; font-family: ‘Nunito’, sans-serif; color: rgba(255,255,255,0.5); margin-top: 10px; }
+
+/* ─── FAQ ─── */
+.faq-section { padding: 72px 20px; max-width: 760px; margin: 0 auto; }
+.faq-list { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+.faq-item { background: #fff; border: 1.5px solid #F2D5DC; border-radius: 16px; overflow: hidden; }
+.faq-q {
+padding: 20px 24px;
+font-weight: 800;
+font-size: 16px;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+user-select: none;
+transition: color 0.2s;
+}
+.faq-q:hover { color: #E8305A; }
+.faq-icon { color: #E8305A; font-size: 22px; flex-shrink: 0; transition: transform 0.3s; font-weight: 400; }
+.faq-icon.open { transform: rotate(45deg); }
+.faq-a {
+max-height: 0; overflow: hidden;
+padding: 0 24px;
+font-size: 15px; color: #8A5A68; line-height: 1.7;
+transition: max-height 0.35s ease, padding 0.3s;
+}
+.faq-a.open { max-height: 300px; padding: 0 24px 20px; }
+
+/* ─── REGISTRO FORM ─── */
+.register-section {
+background: linear-gradient(135deg, #E8305A 0%, #F07A30 100%);
+padding: 72px 20px;
+text-align: center;
+}
+.register-section h2 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(28px, 5vw, 44px);
+color: #fff;
+margin-bottom: 10px;
+line-height: 1.2;
+}
+.register-section p { color: rgba(255,255,255,0.9); font-size: 17px; margin-bottom: 36px; }
+.reg-form {
+display: flex;
+flex-direction: column;
+gap: 14px;
+max-width: 400px;
+margin: 0 auto;
+}
+.reg-form input {
+padding: 17px 24px;
+border-radius: 50px;
+border: none;
+font-size: 16px;
+font-family: ‘Nunito’, sans-serif;
+background: #fff;
+color: #2D1520;
+box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+outline: none;
+}
+.reg-form input::placeholder { color: #bbb; }
+.btn-reg {
+padding: 18px;
+border-radius: 50px;
+border: none;
+background: #1A0A10;
+color: #fff;
+font-weight: 900;
+font-size: 17px;
+font-family: ‘Nunito’, sans-serif;
+cursor: pointer;
+box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+transition: transform 0.2s;
+}
+.btn-reg:hover { transform: translateY(-2px); }
+.reg-note { color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 8px; }
+
+/* ─── FOOTER ─── */
+footer {
+background: #1A0A10;
+color: rgba(255,255,255,0.5);
+text-align: center;
+padding: 36px 20px;
+font-size: 14px;
+line-height: 1.8;
+}
+footer strong { color: #F2607A; }
+
+/* ─── MODAL ─── */
+.modal-overlay {
+display: none;
+position: fixed; inset: 0;
+background: rgba(0,0,0,0.65);
+z-index: 999;
+align-items: center; justify-content: center;
+padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+background: #fff;
+border-radius: 28px;
+padding: 48px 36px;
+max-width: 400px; width: 100%;
+text-align: center;
+animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.modal-emoji { font-size: 68px; margin-bottom: 16px; }
+.modal-box h3 { font-family: ‘Playfair Display’, serif; font-size: 26px; margin-bottom: 10px; color: #2D1520; }
+.modal-box p { color: #8A5A68; font-size: 16px; line-height: 1.6; margin-bottom: 28px; }
+.btn-modal-close {
+background: linear-gradient(135deg, #E8305A, #C0224A);
+color: #fff;
+border: none;
+padding: 14px 40px;
+border-radius: 50px;
+font-size: 16px;
+font-weight: 800;
+font-family: ‘Nunito’, sans-serif;
+cursor: pointer;
+box-shadow: 0 6px 24px rgba(232,48,90,0.3);
+}
+
+/* ─── STICKY MOBILE ─── */
+.sticky-bar {
+position: fixed; bottom: 0; left: 0; right: 0;
+background: #E8305A;
+padding: 14px 20px;
+text-align: center;
+z-index: 100;
+display: none;
+box-shadow: 0 -4px 24px rgba(232,48,90,0.35);
+}
+.sticky-bar a { color: #fff; font-weight: 900; font-size: 16px; text-decoration: none; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+from { opacity: 0; transform: scale(0.8); }
+to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+.hstat { padding: 14px 20px; }
+.hstat-num { font-size: 34px; }
+.sticky-bar { display: block; }
+body { padding-bottom: 58px; }
+.video-area { padding-left: 0; }
+.why-box { flex-direction: column; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- URGENCIA -->
+
+<div class="urgency-bar">
+  🔥 Solo <span>40 plazas</span> disponibles · El grupo cierra cuando se llene
+</div>
+
+<!-- ══════ HERO ══════ -->
+
+<section class="hero">
+  <div class="hero-logo">LA NANI FITNESS</div>
+  <div class="hero-eyebrow">Programa fitness · Mujeres +60</div>
+  <h1>Reto Vuelvo<br/><em>a Moverme</em></h1>
+  <p class="hero-quote">"Llevas demasiado tiempo diciéndote que ya no puedes."</p>
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-num">21</div>
+      <div class="hstat-label">Días</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">40</div>
+      <div class="hstat-label">Plazas</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">30€</div>
+      <div class="hstat-label">Inversión</div>
+    </div>
+  </div>
+  <a href="#comprar" class="hero-cta">🔥 Quiero unirme al reto</a>
+  <p class="hero-note">Sin gimnasio · Sin material · Solo una silla y ganas</p>
+</section>
+
+<!-- ══════ ¿ESTO TE SUENA? ══════ -->
+
+<section class="pain-section">
+  <div class="pain-inner">
+    <div class="section-eyebrow eyebrow-pink">¿Esto te suena?</div>
+    <h2 class="pain-title">Sabemos exactamente<br/>cómo te sientes</h2>
+    <div class="pain-list">
+      <div class="pain-item"><span class="pain-dot">🦵</span>Me levanto con las piernas rígidas y tardo un rato en arrancar</div>
+      <div class="pain-item"><span class="pain-dot">😟</span>Tengo miedo de caerme cuando salgo sola a la calle</div>
+      <div class="pain-item"><span class="pain-dot">😔</span>Me agoto antes que antes y ya no sé si es la edad o si me he abandonado</div>
+      <div class="pain-item"><span class="pain-dot">💔</span>He dejado de hacer cosas que me gustaban porque mi cuerpo no me acompaña</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ QUÉ INCLUYE ══════ -->
+
+<section class="includes-section">
+  <div class="section-eyebrow eyebrow-dark">¿Qué incluye?</div>
+  <h2 class="section-title">Todo lo que<br/>necesitas para lograrlo</h2>
+  <p class="section-desc">No es una clase de gimnasia. No es un programa genérico. Es 21 días contigo, con La Nani, con 39 mujeres exactamente como tú.</p>
+
+  <div class="includes-grid">
+    <div class="include-card">
+      <div class="include-num">01</div>
+      <div class="include-title">Video diario</div>
+      <div class="include-desc">Entre 10 y 20 min. Adaptado a ti. Sin saltar, sin material, sin suelo.</div>
+    </div>
+    <div class="include-card">
+      <div class="include-num">02</div>
+      <div class="include-title">Grupo privado con La Nani</div>
+      <div class="include-desc">La Nani te responde ella personalmente cada día. No un asistente. Ella.</div>
+    </div>
+    <div class="include-card">
+      <div class="include-num">03</div>
+      <div class="include-title">Comunidad de 40 mujeres</div>
+      <div class="include-desc">Un grupo pequeño y real donde todas se acompañan y celebran juntas.</div>
+    </div>
+    <div class="include-card special">
+      <div class="include-tag">⚡ En directo</div>
+      <div class="include-num">04</div>
+      <div class="include-title">Sesión en directo · Día 21</div>
+      <div class="include-desc">Nos vemos todas en vivo para celebrar lo que hemos conseguido.</div>
+    </div>
+    <div class="include-card">
+      <div class="include-num">05</div>
+      <div class="include-title">Diploma personalizado</div>
+      <div class="include-desc">Un recuerdo digital de todo lo que has logrado en 21 días.</div>
+    </div>
+    <div class="include-card">
+      <div class="include-num">06</div>
+      <div class="include-title">Acceso inmediato</div>
+      <div class="include-desc">En menos de 5 minutos ya eres parte del reto.</div>
+    </div>
+  </div>
+
+  <div class="why-box">
+    <div class="why-icon">💬</div>
+    <div class="why-text">
+      <strong>¿Por qué solo 40 plazas?</strong>
+      Porque quiero conoceros a todas. Cuando me escribáis, os respondo yo — no un asistente. Un grupo pequeño crea una comunidad real. Y eso es lo que cambia las cosas de verdad.
+    </div>
+  </div>
+</section>
+
+<!-- ══════ CALENDARIO ══════ -->
+
+<section class="calendar-section">
+  <div class="calendar-inner">
+    <div class="section-eyebrow eyebrow-dark">El programa</div>
+    <h2 class="section-title">Los 21 días del reto</h2>
+    <p class="section-desc" style="margin-bottom:40px">Haz clic en cualquier día para ver el video. Cuando los videos estén disponibles aparecerán aquí automáticamente.</p>
+
+```
+<!-- SEMANA 1 -->
+<div class="week-block">
+  <div class="week-header week-1">
+    <div>
+      <div class="week-label">Semana 1 — Despierta</div>
+      <div class="week-sub">Activamos el cuerpo con suavidad. Sin prisa, sin dolor.</div>
+    </div>
+  </div>
+  <div class="days-list" id="week1"></div>
+</div>
+
+<!-- SEMANA 2 -->
+<div class="week-block">
+  <div class="week-header week-2">
+    <div>
+      <div class="week-label">Semana 2 — Fortalece</div>
+      <div class="week-sub">Construimos fuerza real. Tu cuerpo empieza a responder.</div>
+    </div>
+  </div>
+  <div class="days-list" id="week2"></div>
+</div>
+
+<!-- SEMANA 3 -->
+<div class="week-block">
+  <div class="week-header week-3">
+    <div>
+      <div class="week-label">Semana 3 — Transforma</div>
+      <div class="week-sub">Comprobamos el cambio. Ya no eres la misma que empezó.</div>
+    </div>
+  </div>
+  <div class="days-list" id="week3"></div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════ TRANSFORMACIÓN ══════ -->
+
+<section class="transform-section">
+  <div class="section-eyebrow eyebrow-dark">Al final del reto</div>
+  <h2 class="section-title">Lo que vas a conseguir<br/>en 21 días</h2>
+  <div class="transform-grid">
+    <div class="transform-card">
+      <div class="t-icon">🙋‍♀️</div>
+      <div>
+        <div class="t-title">Levantarte del suelo sola</div>
+        <div class="t-desc">Sin ayuda, sin drama, sin agarrarte a nada.</div>
+      </div>
+    </div>
+    <div class="transform-card">
+      <div class="t-icon">🪜</div>
+      <div>
+        <div class="t-title">Subir escaleras diferente</div>
+        <div class="t-desc">Sin que las piernas pesen ni duelan.</div>
+      </div>
+    </div>
+    <div class="transform-card">
+      <div class="t-icon">🚶‍♀️</div>
+      <div>
+        <div class="t-title">Caminar con seguridad</div>
+        <div class="t-desc">Con equilibrio y sin miedo a caerte.</div>
+      </div>
+    </div>
+    <div class="transform-card">
+      <div class="t-icon">☀️</div>
+      <div>
+        <div class="t-title">Amanecer con más energía</div>
+        <div class="t-desc">Menos rigidez, más ganas de moverte.</div>
+      </div>
+    </div>
+    <div class="transform-card">
+      <div class="t-icon">💪</div>
+      <div>
+        <div class="t-title">Confiar en tu cuerpo</div>
+        <div class="t-desc">Recuperar lo que creías que habías perdido.</div>
+      </div>
+    </div>
+    <div class="transform-card">
+      <div class="t-icon">🏆</div>
+      <div>
+        <div class="t-title">Demostrarte que sí puedes</div>
+        <div class="t-desc">El cambio más importante de todos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ PRECIO / CTA ══════ -->
+
+<section class="price-section" id="comprar">
+  <div class="price-badge">🎯 Pago único · Acceso inmediato</div>
+  <h2 class="price-title">Empieza tu<br/><em>transformación hoy</em></h2>
+  <div class="price-amount"><sup>€</sup>30</div>
+  <p class="price-sub">Pago único · Solo 40 plazas</p>
+  <div class="price-features">
+    <div class="pfeat">✓ 21 videos diarios</div>
+    <div class="pfeat">✓ Grupo privado con La Nani</div>
+    <div class="pfeat">✓ Sesión en directo día 21</div>
+    <div class="pfeat">✓ Diploma personalizado</div>
+    <div class="pfeat">✓ Sin material necesario</div>
+  </div>
+  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank" class="btn-buy">🔥 Quiero mi plaza ahora</a>
+  <div class="price-guarantee">🔒 Pago seguro · Acceso inmediato en menos de 5 minutos</div>
+  <p class="nani-quote">"Esto no es solo un reto. Es el inicio de algo nuevo."<cite>— La Nani</cite></p>
+</section>
+
+<!-- ══════ FAQ ══════ -->
+
+<section class="faq-section">
+  <div class="section-eyebrow eyebrow-dark">Preguntas frecuentes</div>
+  <h2 class="section-title">Resolvemos<br/>tus dudas</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Y si nunca he hecho ejercicio? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Mejor. Este reto está pensado para empezar desde cero. No necesitas experiencia previa ni estar en forma. El Día 1 es suave, corto y diseñado para que cualquier persona lo pueda hacer.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Y si tengo problemas de rodilla o espalda? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Los ejercicios tienen opciones más suaves. La Nani te guía en cada paso y siempre hay una alternativa más fácil. Aun así, si tienes una lesión importante, consulta con tu médico antes de empezar.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Y si un día no puedo hacer el ejercicio? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Los videos quedan guardados. Hazlo cuando puedas, sin agobios. Lo importante es no abandonar, no hacerlo perfecto. Si un día te saltas una sesión, al día siguiente retomas y listo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Necesito material o equipamiento? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Solo necesitas una silla resistente y muchas ganas. Sin gimnasio, sin máquinas, sin pesas. Todo está pensado para hacerlo en el salón de tu casa.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Cuánto tiempo dura cada video? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Entre 8 y 20 minutos dependiendo del día. La mayoría rondan los 12-15 minutos. El Día 21 es la sesión en directo de celebración, que dura 45 minutos. Muy manejable para cualquier agenda.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">¿Cómo accedo al grupo y los videos? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Nada más inscribirte recibirás un email con todos los detalles de acceso. En menos de 5 minutos ya formas parte del reto. Es muy sencillo, te lo prometemos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ REGISTRO ══════ -->
+
+<section class="register-section" id="registro">
+  <h2>¡Reserva tu plaza ahora!</h2>
+  <p>Rellena el formulario y contactaremos contigo<br/>con todos los detalles del pago y acceso.</p>
+  <form class="reg-form" action="https://formspree.io/f/andresascaniod@gmail.com" method="POST" onsubmit="handleRegister(event)">
+    <input type="hidden" name="_subject" value="🔥 Nueva inscripción - Reto Vuelvo a Moverme"/>
+    <input type="hidden" name="_replyto" id="hidden-email"/>
+    <input type="text" placeholder="Tu nombre" required id="reg-name"/>
+    <input type="email" placeholder="Tu email" required id="reg-email"/>
+    <input type="tel" placeholder="Tu teléfono (opcional)" id="reg-phone"/>
+    <button type="submit" class="btn-reg">✨ ¡Quiero mi plaza!</button>
+  </form>
+  <p class="reg-note">🔒 Solo 40 plazas · Sin spam · Te escribimos en menos de 24h</p>
+</section>
+
+<!-- ══════ FOOTER ══════ -->
+
+<footer>
+  <strong>La Nani Fitness</strong> · Reto Vuelvo a Moverme<br/>
+  Programa fitness para mujeres +60<br/>
+  <span style="font-size:12px;opacity:0.5">© 2025 La Nani Fitness · Todos los derechos reservados</span>
+</footer>
+
+<!-- STICKY MOBILE -->
+
+<div class="sticky-bar">
+  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank">🔥 Reservar mi plaza · 30€</a>
+</div>
+
+<!-- MODAL ÉXITO -->
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-emoji">🎉</div>
+    <h3>¡Apuntada al reto!</h3>
+    <p>Gracias, <strong id="modal-name"></strong>. En menos de 24 horas recibirás un mensaje con todos los detalles para unirte.</p>
+    <button class="btn-modal-close" onclick="closeModal()">¡Genial, me alegra!</button>
+  </div>
+</div>
+
+<script>
+// ── DATOS DE LOS 21 DÍAS ──
+const days = [
+  // Semana 1
+  { day:1,  title:"Empezamos",        desc:"Tu cuerpo te está escuchando",          time:"10 min", video:"" },
+  { day:2,  title:"Despierta tus piernas", desc:"Activación sentada",               time:"12 min", video:"" },
+  { day:3,  title:"Respira y muévete", desc:"Respiración + movilidad espalda",      time:"10 min", video:"" },
+  { day:4,  title:"Escucha tu cuerpo", desc:"Estiramientos suaves y conscientes",   time:"8 min",  video:"" },
+  { day:5,  title:"De pie y sin miedo", desc:"Equilibrio básico de pie",            time:"12 min", video:"" },
+  { day:6,  title:"Brazos y postura",  desc:"Hombros, cuello y postura",            time:"10 min", video:"" },
+  { day:7,  title:"¡Primera semana!",  desc:"Repaso suave + celebración",           time:"15 min", video:"" },
+  // Semana 2
+  { day:8,  title:"Semana fuerte",     desc:"Sentadillas asistidas con silla",      time:"12 min", video:"" },
+  { day:9,  title:"Piernas firmes",    desc:"Fortalecimiento de piernas de pie",    time:"15 min", video:"" },
+  { day:10, title:"El core olvidado",  desc:"Abdomen y suelo pélvico",              time:"12 min", video:"" },
+  { day:11, title:"Reto personal",     desc:"Levantarse del suelo con apoyo",       time:"10 min", video:"" },
+  { day:12, title:"Equilibrio plus",   desc:"Equilibrio con movimiento",            time:"12 min", video:"" },
+  { day:13, title:"Fuerza completa",   desc:"Rutina completa cuerpo entero",        time:"15 min", video:"" },
+  { day:14, title:"Mitad del reto",    desc:"Sesión especial + reflexión",          time:"20 min", video:"" },
+  // Semana 3
+  { day:15, title:"Recta final",       desc:"Fuerza funcional completa",            time:"12 min", video:"" },
+  { day:16, title:"Camina diferente",  desc:"Marcha, zancada y confianza",          time:"15 min", video:"" },
+  { day:17, title:"Sin miedo al suelo", desc:"Levantarse del suelo sola",           time:"15 min", video:"" },
+  { day:18, title:"Cuerpo y mente",    desc:"Movimiento + respiración consciente",  time:"12 min", video:"" },
+  { day:19, title:"Casi llegamos",     desc:"Rutina completa de fuerza",            time:"15 min", video:"" },
+  { day:20, title:"Último entreno",    desc:"Rutina especial de cierre",            time:"20 min", video:"" },
+  { day:21, title:"¡Lo conseguiste!",  desc:"SESIÓN EN DIRECTO — Celebración",     time:"45 min", video:"", special:true },
+];
+
+// ── RENDERIZAR DÍAS ──
+function renderDays() {
+  const containers = { 1:'week1', 2:'week2', 3:'week3' };
+  const weeks = { 1:[], 2:[], 3:[] };
+  days.forEach((d,i) => {
+    const w = i < 7 ? 1 : i < 14 ? 2 : 3;
+    weeks[w].push(d);
+  });
+
+  Object.entries(weeks).forEach(([w, wdays]) => {
+    const el = document.getElementById(containers[w]);
+    el.innerHTML = wdays.map(d => `
+      <div class="day-row ${d.special?'special':''}" onclick="toggleDay(${d.day})">
+        <div class="day-num-col">
+          <small>Día</small>
+          ${d.day}
+        </div>
+        <div class="day-content">
+          <div class="day-title">${d.title}</div>
+          <div class="day-desc">${d.desc}</div>
+        </div>
+        <div class="day-time">${d.time}</div>
+      </div>
+      <div class="video-area" id="video-${d.day}">
+        <div class="video-wrapper">
+          ${d.video
+            ? `<iframe src="https://www.youtube.com/embed/${d.video}?rel=0" allowfullscreen></iframe>`
+            : `<div class="video-placeholder">
+                <div class="play-btn">▶</div>
+                <p><strong>Día ${d.day} — ${d.title}</strong><br/>El video estará disponible pronto.<br/>Vuelve cuando empiece el reto 🔥</p>
+              </div>`
+          }
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+// ── ABRIR / CERRAR VIDEO ──
+function toggleDay(num) {
+  const el = document.getElementById('video-' + num);
+  el.classList.toggle('open');
+}
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const icon = btn.querySelector('.faq-icon');
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a.open').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-icon.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) {
+    answer.classList.add('open');
+    icon.classList.add('open');
+  }
+}
+
+// ── REGISTRO ──
+function handleRegister(e) {
+  e.preventDefault();
+  const form = e.target;
+  const name = document.getElementById('reg-name').value;
+  const email = document.getElementById('reg-email').value;
+  document.getElementById('hidden-email').value = email;
+  
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).then(r => {
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal').classList.add('show');
+    form.reset();
+  }).catch(() => {
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal').classList.add('show');
+    form.reset();
+  });
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+// ── INIT ──
+renderDays();
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
