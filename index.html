@@ -875,7 +875,7 @@ body { padding-bottom: 58px; }
     <div class="pfeat">✓ Diploma personalizado</div>
     <div class="pfeat">✓ Sin material necesario</div>
   </div>
-  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank" class="btn-buy">🔥 Quiero mi plaza ahora</a>
+  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank" class="btn-buy">✨ ¡Quiero unirme al reto!</a>
   <div class="price-guarantee">🔒 Pago seguro · Acceso inmediato en menos de 5 minutos</div>
   <p class="nani-quote">"Esto no es solo un reto. Es el inicio de algo nuevo."<cite>— La Nani</cite></p>
 </section>
@@ -944,12 +944,16 @@ body { padding-bottom: 58px; }
 <!-- ══════ REGISTRO ══════ -->
 
 <section class="register-section" id="registro">
-  <h2>¿Lista para empezar?</h2>
-  <p>Solo quedan <strong style="color:#fff;font-size:20px;">40 plazas</strong> — cuando se llenen, cerramos.</p>
-  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank" class="btn-reg" style="display:inline-block;text-decoration:none;text-align:center;">
-    🔥 Quiero mi plaza · 30€
-  </a>
-  <p class="reg-note">🔒 Pago seguro con PayPal · Tras pagar accedes al grupo de WhatsApp</p>
+  <h2>¡Reserva tu plaza ahora!</h2>
+  <p>Es gratis y sin compromiso. El reto arranca en cuanto<br/>se completen las <strong style="color:#fff;font-size:20px;">40 plazas.</strong><br/>Te avisamos en cuanto estés dentro. 🎉</p>
+  <form class="reg-form" action="https://formspree.io/f/mnjwarrj" method="POST" onsubmit="handleReserva(event)">
+    <input type="hidden" name="_subject" value="🎯 Nueva reserva - Reto Vuelvo a Moverme"/>
+    <input type="text" name="nombre" placeholder="Tu nombre completo" required/>
+    <input type="email" name="email" placeholder="Tu email" required/>
+    <input type="tel" name="telefono" placeholder="Tu número de teléfono" required/>
+    <button type="submit" class="btn-reg">🎯 ¡Quiero mi plaza gratis!</button>
+  </form>
+  <p class="reg-note">🔒 Sin spam · Te avisamos cuando el reto arranque · Totalmente gratis</p>
 </section>
 
 <!-- ══════ FOOTER ══════ -->
@@ -963,7 +967,7 @@ body { padding-bottom: 58px; }
 <!-- STICKY MOBILE -->
 
 <div class="sticky-bar">
-  <a href="https://www.paypal.com/invoice/p/#5DVWC6BPPB3DKXGN" target="_blank">🔥 Reservar mi plaza · 30€</a>
+  <a href="#registro">✨ ¡Quiero unirme al reto!</a>
 </div>
 
 <!-- MODAL ÉXITO -->
@@ -1103,6 +1107,21 @@ function handleRegister(e) {
 }
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
+}
+
+function handleReserva(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = form.querySelector('button');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).finally(() => {
+    form.innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:52px;margin-bottom:16px;">🎉</div><h3 style="font-family:Playfair Display,serif;font-size:24px;color:#fff;margin-bottom:10px;">¡Plaza reservada!</h3><p style="color:rgba(255,255,255,0.85);font-size:16px;line-height:1.6;">Ya estás en la lista. Te escribimos en cuanto el reto esté listo para arrancar. ¡Nos vemos pronto!</p></div>';
+  });
 }
 
 // ── INIT ──
