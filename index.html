@@ -1,79 +1,2321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Nani Fitness — Entrenadora para mujeres de 60+</title>
+  <meta name="description" content="Soy La Nani. A los 64 decidí crear las rutinas de ejercicio que necesitaba y no encontraba. Desde casa, sin excusas, con alegría." />
+  <meta property="og:title" content="La Nani Fitness" />
+  <meta property="og:description" content="Rutinas en casa para mujeres de 60+ que quieren empezar a moverse." />
+  <meta property="og:type" content="website" />
 
-Sígueme
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================
+       1. Tokens
+    ===================================================== */
+    :root {
+      --bg:        #0A0A0F;
+      --surface:   #111118;
+      --surface-2: #1A1A24;
+      --rose:      #E8417A;
+      --orange:    #F0834A;
+      --text:      #F5F0E8;
+      --text-muted:#A09888;
+      --gold:      #C9A96E;
+      --line:      rgba(245, 240, 232, 0.1);
+      --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --gutter:    clamp(1.25rem, 5vw, 3rem);
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --script:    'Dancing Script', cursive;
+      --mx:        50%;
+      --my:        50%;
+    }
+
+    /* =====================================================
+       2. Reset
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: clip;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      overscroll-behavior-y: none;
+    }
+    img, svg, canvas { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { text-wrap: balance; font-family: var(--serif); line-height: 1.08; letter-spacing: -0.02em; }
+    ::selection { background: var(--rose); color: #fff; }
+    :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 4px; }
+
+    /* Defensive: .reveal[data-split] must never be invisible */
+    .reveal[data-split] { opacity: 1; transform: none; }
+
+    /* =====================================================
+       3. Utilities
+    ===================================================== */
+    .container {
+      width: min(1200px, 100% - var(--gutter) * 2);
+      margin-inline: auto;
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--rose) 0%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* =====================================================
+       4. Custom Cursor
+    ===================================================== */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      display: none; opacity: 0;
+      transition: opacity .25s var(--ease-out);
+    }
+    .cursor.is-ready { opacity: 1; }
+    @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
+    .cursor-dot, .cursor-ring {
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; will-change: transform;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px; margin: -3px;
+      background: var(--rose); border-radius: 50%;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px; margin: -18px;
+      border: 1.5px solid rgba(232,65,122,0.5); border-radius: 50%;
+      transition: width .35s var(--ease-out), height .35s var(--ease-out),
+                  margin .35s var(--ease-out), border-color .25s;
+    }
+    .cursor.is-interactive .cursor-ring {
+      width: 52px; height: 52px; margin: -26px;
+      border-color: var(--rose);
+    }
+    .has-cursor, .has-cursor a, .has-cursor button,
+    .has-cursor [data-tilt], .has-cursor .social-card { cursor: none; }
+
+    /* =====================================================
+       5. Navigation
+    ===================================================== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.25rem var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .4s var(--ease-soft), backdrop-filter .4s;
+    }
+    .nav.scrolled {
+      background: rgba(10,10,15,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo {
+      display: flex; align-items: center;
+    }
+    .nav-logo img {
+      height: 42px; width: 42px;
+      object-fit: contain;
+      border-radius: 50%;
+      display: block;
+    }
+    .nav-links { display: none; list-style: none; gap: 2rem; }
+    @media (min-width: 960px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 400; color: var(--text-muted);
+      transition: color .25s; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      padding: .6rem 1.4rem;
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      color: #fff; font-size: 0.875rem; font-weight: 500;
+      border-radius: 100px;
+      transition: opacity .2s, transform .2s var(--ease-out);
+    }
+    .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* =====================================================
+       6. Hero
+    ===================================================== */
+    .hero {
+      min-height: 100svh;
+      position: relative; display: grid;
+      grid-template-columns: 1fr;
+      align-items: center; padding-top: 90px; overflow: hidden;
+    }
+    @media (min-width: 960px) {
+      .hero { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    }
+
+    .hero-gradient {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(circle 700px at var(--mx) var(--my),
+          rgba(232,65,122,0.18) 0%, transparent 55%),
+        radial-gradient(circle 900px at calc(var(--mx) + 15%) calc(var(--my) - 15%),
+          rgba(240,131,74,0.12) 0%, transparent 55%),
+        radial-gradient(circle 500px at 20% 80%,
+          rgba(201,169,110,0.08) 0%, transparent 50%),
+        var(--bg);
+    }
+
+    #particles-canvas {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none; opacity: 0.55;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: var(--gutter);
+    }
+    @media (min-width: 960px) {
+      .hero-content { padding: var(--gutter) var(--gutter) var(--gutter) calc(var(--gutter) + 2rem); }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: .6rem;
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--rose); margin-bottom: 1.5rem;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+    }
+    .hero-eyebrow.is-visible { opacity: 1; transform: translateY(0); }
+    .hero-eyebrow::before {
+      content: ''; display: block; width: 28px; height: 1px; background: var(--rose);
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      font-weight: 900; line-height: 1.02; margin-bottom: 1.5rem;
+    }
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .line-inner {
+      display: block; transform: translateY(110%);
+      transition: transform .9s var(--ease-out);
+    }
+    .hero-title.is-visible .line-inner { transform: translateY(0); }
+    .hero-title .line:nth-child(2) .line-inner { transition-delay: .1s; }
+    .hero-title .line:nth-child(3) .line-inner { transition-delay: .2s; }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--text-muted);
+      font-weight: 300; max-width: 42ch; margin-bottom: 1rem;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .7s .4s var(--ease-out), transform .7s .4s var(--ease-out);
+    }
+    .hero-subtitle.is-visible { opacity: 1; transform: none; }
+
+    .hero-desc {
+      font-size: 1rem; color: var(--text-muted);
+      max-width: 48ch; margin-bottom: 1.75rem; line-height: 1.8;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .7s .55s var(--ease-out), transform .7s .55s var(--ease-out);
+    }
+    .hero-desc.is-visible { opacity: 1; transform: none; }
+
+    .hero-slogan {
+      font-family: var(--script); font-size: clamp(1.4rem, 2.5vw, 2rem);
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 2.5rem; display: block;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .7s .7s var(--ease-out), transform .7s .7s var(--ease-out);
+    }
+    .hero-slogan.is-visible { opacity: 1; transform: none; }
+
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .7s .85s var(--ease-out), transform .7s .85s var(--ease-out);
+    }
+    .hero-actions.is-visible { opacity: 1; transform: none; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.8rem; font-size: .9rem; font-weight: 500;
+      border-radius: 100px;
+      transition: transform .25s var(--ease-out), box-shadow .25s;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0); border-radius: inherit;
+      transition: background .25s;
+    }
+    .btn:hover::after { background: rgba(255,255,255,0.08); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--rose) 0%, var(--orange) 100%);
+      color: #fff;
+    }
+
+    /* Hero social pills */
+    .hero-social-pills {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem;
+      margin-top: .25rem;
+    }
+    @media (min-width: 480px) { .hero-social-pills { grid-template-columns: repeat(4, 1fr); } }
+    .social-pill {
+      display: flex; align-items: center; gap: .55rem;
+      padding: .55rem .8rem; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--line);
+      transition: border-color .25s, transform .2s var(--ease-out);
+      text-decoration: none;
+    }
+    .social-pill:hover { border-color: rgba(232,65,122,0.5); transform: translateY(-2px); }
+    .sp-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .sp-icon svg { width: 14px; height: 14px; fill: #fff; }
+    .social-pill.ig .sp-icon { background: linear-gradient(135deg, #E4405F, #F56040); }
+    .social-pill.yt .sp-icon { background: #FF0000; }
+    .social-pill.fb .sp-icon { background: #1877F2; }
+    .social-pill.tt .sp-icon { background: #010101; }
+    .sp-info { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+    .sp-name { font-size: .65rem; color: var(--text-muted); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sp-count { font-size: .85rem; font-weight: 700; background: linear-gradient(135deg, var(--rose), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .btn-primary:hover { box-shadow: 0 8px 30px rgba(232,65,122,0.4); }
+    .btn-ghost {
+      border: 1px solid var(--line); color: var(--text-muted);
+    }
+    .btn-ghost:hover {
+      border-color: rgba(232,65,122,0.5); color: var(--text);
+      box-shadow: 0 8px 30px rgba(232,65,122,0.15);
+    }
+
+    .hero-visual {
+      position: relative; z-index: 2;
+      padding: var(--gutter);
+      display: flex; justify-content: center; align-items: center;
+    }
+    @media (min-width: 960px) {
+      .hero-visual { padding: 2rem var(--gutter) 2rem 0; justify-content: flex-end; }
+    }
+
+    .hero-photo-frame {
+      position: relative;
+      width: min(380px, 85vw); aspect-ratio: 3/4;
+      border-radius: 24px; overflow: hidden;
+    }
+    .hero-photo-frame::before {
+      content: ''; position: absolute; inset: -3px;
+      border-radius: 27px; z-index: -1;
+      background: linear-gradient(135deg, var(--rose), var(--orange), transparent 65%);
+    }
+    .hero-photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top center;
+    }
+
+    /* Photo placeholders */
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg,
+        rgba(232,65,122,0.18) 0%,
+        rgba(240,131,74,0.12) 50%,
+        rgba(201,169,110,0.08) 100%);
+      border: 1px solid rgba(232,65,122,0.2);
+      border-radius: inherit;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1rem; text-align: center; padding: 2rem;
+      min-height: 320px;
+    }
+    .photo-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.6; }
+    .photo-placeholder .ph-label {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose); opacity: 0.85; line-height: 1.6;
+    }
+    .photo-placeholder .ph-hint {
+      font-size: 0.65rem; color: var(--text-muted); line-height: 1.5; max-width: 22ch;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 3; display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      opacity: 0; animation: fadeIn 1s 2.2s forwards;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--rose));
+      animation: scrollLine 2.2s 2.8s ease-in-out infinite;
+    }
+    .hero-scroll-text {
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(0.3) translateY(-4px); opacity: 0.3; transform-origin: top; }
+      50%       { transform: scaleY(1)   translateY(0);    opacity: 1;   transform-origin: top; }
+    }
+
+    /* =====================================================
+       7. Section base
+    ===================================================== */
+    .section { padding: clamp(4rem, 8vw, 7rem) 0; position: relative; }
+    .section-header { text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+    .section-eyebrow {
+      display: inline-block; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose);
+      margin-bottom: 1rem;
+    }
+    .section-title { font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.1; }
+    .section-line {
+      display: block; width: 48px; height: 2px;
+      background: linear-gradient(to right, var(--rose), var(--orange));
+      margin: 1.5rem auto 0;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .7s .3s var(--ease-out);
+    }
+    .section-header.is-visible .section-line { transform: scaleX(1); }
+
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .75s var(--ease-out), transform .75s var(--ease-out);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .reveal-left {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    }
+    .reveal-left.is-visible { opacity: 1; transform: none; }
+    .reveal-right {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+    }
+    .reveal-right.is-visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* =====================================================
+       8. Social Counters
+    ===================================================== */
+    .counters-section {
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .counters-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--line); border-radius: 16px; overflow: hidden;
+    }
+    @media (min-width: 720px) { .counters-grid { grid-template-columns: repeat(4, 1fr); } }
+    .counter-card {
+      background: var(--surface-2);
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      display: flex; flex-direction: column; align-items: center;
+      gap: .75rem; text-align: center;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d;
+      transition: background .3s;
+    }
+    .counter-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(232,65,122,0.07) 0%, rgba(240,131,74,0.04) 100%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .counter-card:hover::before { opacity: 1; }
+    .counter-icon {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(232,65,122,0.12); border-radius: 12px;
+    }
+    .counter-icon svg { width: 22px; height: 22px; fill: var(--rose); }
+    .counter-number {
+      font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .counter-label {
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* =====================================================
+       9. About
+    ===================================================== */
+    .about-section { background: var(--bg); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: clamp(2.5rem, 5vw, 5rem); align-items: center;
+    }
+    @media (min-width: 960px) { .about-grid { grid-template-columns: 1fr 1.15fr; } }
+    .about-photo-wrap { position: relative; }
+    .about-photo-frame {
+      aspect-ratio: 3/4; border-radius: 20px; overflow: hidden; position: relative;
+    }
+    .about-photo-frame::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,15,0.55) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .about-photo-frame img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    }
+    .about-badge {
+      position: absolute; bottom: -1rem; right: -1rem;
+      background: var(--surface-2); border: 1px solid var(--line);
+      border-radius: 16px; padding: 1rem 1.5rem; text-align: center;
+    }
+    .about-badge-num {
+      display: block; font-family: var(--serif);
+      font-size: 2.2rem; font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .about-badge-label {
+      font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .about-content { display: flex; flex-direction: column; gap: 1.5rem; }
+    .about-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; }
+    .about-title em { font-style: italic; color: var(--rose); -webkit-text-fill-color: var(--rose); }
+    .about-text { font-size: 1rem; color: var(--text-muted); line-height: 1.8; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .about-tag {
+      padding: .35rem 1rem; border-radius: 100px;
+      border: 1px solid var(--line);
+      font-size: 0.8rem; color: var(--text-muted);
+      transition: border-color .25s, color .25s;
+    }
+    .about-tag:hover { border-color: var(--rose); color: var(--text); }
+
+    /* =====================================================
+       10. Features
+    ===================================================== */
+    .features-section { background: var(--surface); }
+    .features-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+    }
+    @media (min-width: 720px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
+    .feature-card {
+      background: var(--surface-2); border: 1px solid var(--line);
+      border-radius: 20px; padding: 2.25rem 2rem;
+      transform-style: preserve-3d; position: relative; overflow: hidden;
+      transition: border-color .3s;
+    }
+    .feature-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(232,65,122,0.04), rgba(240,131,74,0.02));
+      opacity: 0; transition: opacity .3s;
+    }
+    .feature-card:hover { border-color: rgba(232,65,122,0.45); }
+    .feature-card:hover::after { opacity: 1; }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 1.25rem; display: block; }
+    .feature-title { font-size: 1.3rem; font-weight: 700; margin-bottom: .75rem; line-height: 1.2; }
+    .feature-text { font-size: .9rem; color: var(--text-muted); line-height: 1.75; }
+
+    /* =====================================================
+       11. Manifesto
+    ===================================================== */
+    .manifesto-section {
+      position: relative; overflow: hidden;
+      min-height: 72svh; display: flex; align-items: center;
+    }
+    .manifesto-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .manifesto-bg img {
+      width: 100%; height: 115%; object-fit: cover; object-position: center 30%;
+      will-change: transform;
+    }
+    .manifesto-bg-fallback {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg,
+        rgba(232,65,122,0.35) 0%,
+        rgba(240,131,74,0.2) 40%,
+        rgba(10,10,15,0.95) 100%);
+    }
+    .manifesto-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,15,0.72) 0%,
+        rgba(10,10,15,0.45) 50%,
+        rgba(10,10,15,0.82) 100%
+      );
+    }
+    .manifesto-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 4rem var(--gutter); width: 100%;
+    }
+    .manifesto-line {
+      width: 1px; height: 56px;
+      background: linear-gradient(to bottom, var(--rose), transparent);
+      margin: 0 auto 2.5rem;
+      transform: scaleY(0); transform-origin: top;
+      transition: transform .8s var(--ease-out);
+    }
+    .manifesto-line.is-visible { transform: scaleY(1); }
+    .manifesto-quote {
+      font-size: clamp(2rem, 5.5vw, 4rem);
+      font-weight: 900; line-height: 1.12; margin-bottom: 1.75rem;
+    }
+    .manifesto-quote em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .manifesto-sub {
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      color: rgba(245,240,232,0.75); max-width: 56ch; margin: 0 auto; line-height: 1.7;
+    }
+
+    /* =====================================================
+       12. Social Links
+    ===================================================== */
+    .social-section { background: var(--bg); }
+    .social-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
+    }
+    @media (min-width: 720px) { .social-grid { grid-template-columns: repeat(4, 1fr); } }
+    .social-card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 20px; padding: 1.75rem 1.5rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transform-style: preserve-3d; position: relative; overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .social-card::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0; transition: opacity .3s; border-radius: inherit;
+    }
+    .social-card.ig::before { background: linear-gradient(135deg, rgba(228,64,95,.09), rgba(245,96,64,.06)); }
+    .social-card.yt::before { background: linear-gradient(135deg, rgba(255,0,0,.09), rgba(255,80,0,.05)); }
+    .social-card.fb::before { background: linear-gradient(135deg, rgba(24,119,242,.1), rgba(0,90,200,.06)); }
+    .social-card.tt::before { background: linear-gradient(135deg, rgba(105,201,208,.1), rgba(255,22,92,.07)); }
+    .social-card:hover { border-color: rgba(232,65,122,0.45); box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+    .social-card:hover::before { opacity: 1; }
+    .social-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .social-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .social-card.ig .social-icon { background: linear-gradient(135deg, #E4405F 0%, #F56040 50%, #FFDC80 100%); }
+    .social-card.yt .social-icon { background: #FF0000; }
+    .social-card.fb .social-icon { background: #1877F2; }
+    .social-card.tt .social-icon { background: linear-gradient(135deg, #010101 0%, #69C9D0 50%, #FF165C 100%); }
+    .social-name { font-size: .85rem; font-weight: 500; color: var(--text-muted); }
+    .social-desc { font-size: .85rem; color: var(--text-muted); line-height: 1.55; flex: 1; }
+    .social-handle {
+      font-size: .8rem; font-weight: 500; color: var(--rose);
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .social-handle::after { content: '→'; transition: transform .25s; display: inline-block; }
+    .social-card:hover .social-handle::after { transform: translateX(4px); }
+
+    /* =====================================================
+       13. CTA Final
+    ===================================================== */
+    .cta-section {
+      position: relative; overflow: hidden;
+      padding: clamp(5rem, 10vw, 8rem) var(--gutter);
+      text-align: center;
+    }
+    .cta-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(135deg,
+        rgba(232,65,122,0.22) 0%,
+        rgba(240,131,74,0.16) 50%,
+        rgba(201,169,110,0.09) 100%);
+      background-size: 200% 200%;
+      animation: ctaGradient 9s ease-in-out infinite;
+    }
+    .cta-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--bg); opacity: 0.58;
+    }
+    @keyframes ctaGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50%       { background-position: 100% 50%; }
+    }
+    .cta-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-title { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; margin-bottom: 1.25rem; }
+    .cta-text { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2.5rem; line-height: 1.75; }
+    .btn-cta-big {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: 1.1rem 2.8rem;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--orange) 100%);
+      color: #fff; font-size: 1rem; font-weight: 600; border-radius: 100px;
+      box-shadow: 0 0 40px rgba(232,65,122,0.35);
+      transition: transform .25s var(--ease-out), box-shadow .25s;
+      background-size: 200% 200%;
+      animation: btnGradientShift 5s ease-in-out infinite;
+    }
+    @keyframes btnGradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%       { background-position: 100% 50%; }
+    }
+    .btn-cta-big:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 60px rgba(232,65,122,0.55);
+    }
+
+    /* =====================================================
+       14. Footer
+    ===================================================== */
+    .footer {
+      background: var(--surface); border-top: 1px solid var(--line);
+      padding: 2.5rem var(--gutter);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1.5rem; text-align: center;
+    }
+    @media (min-width: 720px) {
+      .footer { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+    .footer-logo {
+      display: flex; align-items: center;
+    }
+    .footer-logo img {
+      height: 56px; width: 56px;
+      object-fit: contain;
+      border-radius: 50%;
+      display: block;
+    }
+    .footer-links { display: flex; gap: 1.25rem; }
+    .footer-links a {
+      display: flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface-2); border: 1px solid var(--line);
+      transition: border-color .25s, transform .25s var(--ease-out);
+    }
+    .footer-links a:hover { border-color: var(--rose); transform: translateY(-2px); }
+    .footer-links svg { width: 16px; height: 16px; fill: var(--text-muted); transition: fill .25s; }
+    .footer-links a:hover svg { fill: var(--rose); }
+    .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* =====================================================
+       15. Global keyframes
+    ===================================================== */
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Grain */
+    .grain {
+      position: fixed; inset: 0; z-index: 998;
+      pointer-events: none; opacity: 0.022; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 150px 150px;
+    }
+
+    /* =====================================================
+       16. Responsive tweaks
+    ===================================================== */
+    @media (max-width: 539px) {
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn { justify-content: center; }
+      .about-badge { bottom: .5rem; right: .5rem; }
+      .social-grid { grid-template-columns: 1fr; }
+    }
+
+    /* =====================================================
+       17. Products / Afiliados
+    ===================================================== */
+    .products-section { background: var(--bg); }
+    .products-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+    }
+    @media (min-width: 540px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .product-card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 20px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transform-style: preserve-3d; position: relative;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .product-card:hover {
+      border-color: rgba(232,65,122,0.4);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+
+    .product-img-wrap {
+      aspect-ratio: 4/3; overflow: hidden; position: relative;
+      background: var(--surface-2);
+    }
+    .product-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s var(--ease-out);
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+    .product-img-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, rgba(232,65,122,0.12) 0%, rgba(240,131,74,0.08) 100%);
+      border-bottom: 1px solid var(--line);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: .75rem;
+      text-align: center; padding: 1.5rem;
+    }
+    .product-img-placeholder .pp-icon { font-size: 2.8rem; opacity: 0.7; }
+    .product-img-placeholder .pp-label {
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose); opacity: 0.7; line-height: 1.5;
+    }
+
+    .product-body {
+      padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; flex: 1;
+    }
+    .product-badge {
+      display: inline-flex; align-items: center;
+      padding: .25rem .75rem; border-radius: 100px;
+      background: rgba(232,65,122,0.12); border: 1px solid rgba(232,65,122,0.2);
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--rose); width: fit-content;
+    }
+    .product-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; line-height: 1.2;
+    }
+    .product-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; flex: 1; }
+    .product-stores {
+      display: flex; flex-direction: column; gap: .6rem; margin-top: .25rem;
+    }
+    .store-btn {
+      display: flex; align-items: center; justify-content: center; gap: .6rem;
+      padding: .6rem 1rem; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600; text-decoration: none;
+      transition: opacity .2s, transform .2s var(--ease-out);
+      border: 1px solid transparent;
+    }
+    .store-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .store-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .store-btn.amazon {
+      background: #FF9900; color: #111;
+    }
+    .store-btn.aliexpress {
+      background: #E62E04; color: #fff;
+    }
+    .store-btn.temu {
+      background: #FA5120; color: #fff;
+    }
+
+    /* Note banner below products */
+    .products-note {
+      margin-top: 2.5rem; padding: 1.25rem 1.5rem;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 14px; border-left: 3px solid var(--rose);
+      font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;
+    }
+    .products-note strong { color: var(--text); }
+
+    /* =====================================================
+       18. Reduced motion — only intrusive effects
+    ===================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      #particles-canvas { display: none; }
+      .hero-scroll-line { animation: none; }
+      .cta-bg { animation: none; }
+      .btn-cta-big { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom cursor (hidden until first mousemove) -->
+  <div class="cursor" data-cursor-root aria-hidden="true">
+    <span class="cursor-dot"></span>
+    <span class="cursor-ring"></span>
+  </div>
+
+  <!-- ======================================================
+       NAV
+  ====================================================== -->
+  <nav class="nav" id="nav" aria-label="Navegación principal">
+    <a href="#inicio" class="nav-logo" aria-label="La Nani Fitness — Inicio">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="42" height="42">
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#sobre">Sobre mí</a></li>
+      <li><a href="#rutinas">Rutinas</a></li>
+      <li><a href="productos.html">Mis favoritos</a></li>
+      <li><a href="#comunidad">Comunidad</a></li>
+      <li><a href="redes.html">Redes</a></li>
+    </ul>
+    <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" class="nav-cta btn-primary btn" aria-label="Sígueme en Instagram">Sígueme</a>
+  </nav>
+
+  <!-- ======================================================
+       HERO
+  ====================================================== -->
+  <section class="hero" id="inicio" aria-label="Presentación">
+    <div class="hero-gradient" aria-hidden="true"></div>
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+    <!-- Left: content -->
+    <div class="hero-content">
+      <p class="hero-eyebrow">+60 años · Creadora de contenido</p>
+
+      <h1 class="hero-title" id="hero-title">
+        <span class="line"><span class="line-inner"><span class="gradient-text">La Nani</span></span></span>
+        <span class="line"><span class="line-inner">Fitness</span></span>
+        <span class="line"><span class="line-inner" style="font-style:italic;font-size:0.68em;color:var(--text-muted)">para mujeres de 60+</span></span>
+      </h1>
+
+      <p class="hero-subtitle">Empecé a los 60 porque nunca es tarde.</p>
+
+      <p class="hero-desc">
+        Creo rutinas para mujeres como tú — desde casa, sin excusas, con energía y alegría. No necesitas un gimnasio. Solo las ganas de empezar.
+      </p>
+
+      <span class="hero-slogan">"Anímate, atrévate, acompáñame y comparte"</span>
+
+      <div class="hero-social-pills">
+        <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" class="social-pill ig" aria-label="Instagram">
+          <span class="sp-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></span>
+          <span class="sp-info"><span class="sp-name">Instagram</span><span class="sp-count">421K+</span></span>
+        </a>
+        <a href="https://www.youtube.com/@lananifitness" target="_blank" rel="noopener" class="social-pill yt" aria-label="YouTube">
+          <span class="sp-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span>
+          <span class="sp-info"><span class="sp-name">YouTube</span><span class="sp-count">54K+</span></span>
+        </a>
+        <a href="https://www.facebook.com/lananifitness" target="_blank" rel="noopener" class="social-pill fb" aria-label="Facebook">
+          <span class="sp-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span>
+          <span class="sp-info"><span class="sp-name">Facebook</span><span class="sp-count">349K+</span></span>
+        </a>
+        <a href="https://www.tiktok.com/@lananifitness" target="_blank" rel="noopener" class="social-pill tt" aria-label="TikTok">
+          <span class="sp-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>
+          <span class="sp-info"><span class="sp-name">TikTok</span><span class="sp-count">40K+</span></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: hero photo -->
+    <div class="hero-visual">
+      <div class="hero-photo-frame">
+        <!--
+          ══════════════════════════════════════════════════════
+          FOTO 3 — Foto de acción (pesa roja, botella La Nani)
+          1. Copia "foto3.jpg" en este mismo directorio.
+          2. Elimina el <div class="photo-placeholder"> de abajo.
+          3. Descomenta la línea <img> siguiente.
+          ══════════════════════════════════════════════════════
+        -->
+        <img src="_DSC9953.jpg" alt="La Nani Fitness — En acción con pesa roja" loading="eager" fetchpriority="high">
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-text">Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       SOCIAL COUNTERS
+  ====================================================== -->
+  <section class="section counters-section" id="comunidad" aria-label="Comunidad">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Comunidad</p>
+        <h2 class="section-title">Una comunidad que crece cada día</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="counters-grid">
+        <div class="counter-card reveal" data-tilt>
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+          <span class="counter-number" data-count-to="421000" data-suffix="+">421K+</span>
+          <span class="counter-label">Instagram</span>
+        </div>
+
+        <div class="counter-card reveal reveal-delay-1" data-tilt>
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <span class="counter-number" data-count-to="54000" data-suffix="+">54K+</span>
+          <span class="counter-label">YouTube</span>
+        </div>
+
+        <div class="counter-card reveal reveal-delay-2" data-tilt>
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <span class="counter-number" data-count-to="349000" data-suffix="+">349K+</span>
+          <span class="counter-label">Facebook</span>
+        </div>
+
+        <div class="counter-card reveal reveal-delay-3" data-tilt>
+          <div class="counter-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </div>
+          <span class="counter-number" data-count-to="40000" data-suffix="+">40K+</span>
+          <span class="counter-label">TikTok</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       SOBRE LA NANI
+  ====================================================== -->
+  <section class="section about-section" id="sobre" aria-label="Sobre La Nani">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Photo column -->
+        <div class="about-photo-wrap reveal-left">
+          <div class="about-photo-frame">
+            <!--
+              ══════════════════════════════════════════════════════
+              FOTO 2 — Look casual (camiseta a rayas marrones)
+              1. Copia "foto2.jpg" en este mismo directorio.
+              2. Elimina el <div class="photo-placeholder"> de abajo.
+              3. Descomenta la línea <img> siguiente.
+              ══════════════════════════════════════════════════════
+            -->
+            <img src="8C03F9FF-3658-49FA-874A-BE8EF11DBB9F.png" alt="La Nani Fitness — Look casual y cercano" loading="lazy">
+          </div>
+          <div class="about-badge">
+            <span class="about-badge-num">64</span>
+            <span class="about-badge-label">años y contando</span>
+          </div>
+        </div>
+
+        <!-- Content column -->
+        <div class="about-content">
+          <p class="section-eyebrow reveal">Mi historia</p>
+          <h2 class="about-title reveal reveal-delay-1">
+            Soy La Nani,<br>y empecé <em>a los 60</em>
+          </h2>
+          <p class="about-text reveal reveal-delay-2">
+            Después de la pandemia decidí hacer algo con propósito. Busqué contenido de fitness para mujeres de mi edad... y no lo encontré. Así que lo creé yo.
+          </p>
+          <p class="about-text reveal reveal-delay-2">
+            No soy entrenadora de élite. Soy una mujer de 64 años que decidió moverse, y que quiere que tú también lo hagas. Sin complicaciones, sin miedo, con alegría.
+          </p>
+          <div class="about-tags reveal reveal-delay-3">
+            <span class="about-tag">64 años</span>
+            <span class="about-tag">Fundadora</span>
+            <span class="about-tag">Creadora de contenido</span>
+            <span class="about-tag">+4 plataformas</span>
+            <span class="about-tag">Mujeres de 60+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       LO QUE ENCONTRARÁS
+  ====================================================== -->
+  <section class="section features-section" id="rutinas" aria-label="Lo que encontrarás">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Lo que encontrarás</p>
+        <h2 class="section-title">Sin excusas, desde casa</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal" data-tilt>
+          <span class="feature-icon" aria-hidden="true">🏠</span>
+          <h3 class="feature-title">Rutinas en casa</h3>
+          <p class="feature-text">Sin gym, sin equipamiento especial. Solo tú, tus ganas y el espacio que tienes. Todo diseñado para hacerse en el salón.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1" data-tilt>
+          <span class="feature-icon" aria-hidden="true">🌱</span>
+          <h3 class="feature-title">Para empezar desde cero</h3>
+          <p class="feature-text">Si llevas años sin moverte, este es tu lugar. Empezamos despacio, sin prisa, adaptando cada ejercicio a tu ritmo.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2" data-tilt>
+          <span class="feature-icon" aria-hidden="true">🤝</span>
+          <h3 class="feature-title">Una compañera, no una jefa</h3>
+          <p class="feature-text">Hago contigo lo que te pido que hagas. No soy fría, no juzgo. Soy tu compañera con 64 años de experiencia vivida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       PRODUCTOS AFILIADOS
+  ====================================================== -->
+  <!-- Sección productos movida a productos.html -->
 
 
-+60 AÑOS · CREADORA DE CONTENIDO
-La Nani
-Fitness
-para mujeres de 60+
-Empecé a los 60 porque nunca es tarde.
-Creo rutinas para mujeres como tú — desde casa, sin excusas, con energía y alegría. No necesitas un gimnasio. Solo las ganas de empezar.
-"Anímate, atrévate, acompáñame y comparte"
+  <!-- ======================================================
+       MANIFIESTO
+  ====================================================== -->
+  <section class="manifesto-section section" aria-label="Manifiesto">
+    <div class="manifesto-bg" aria-hidden="true">
+      <!--
+        ══════════════════════════════════════════════════════
+        FOTO 1 — Retrato profesional (camiseta negra La Nani)
+        1. Copia "foto1.jpg" en este mismo directorio.
+        2. Elimina el <div class="manifesto-bg-fallback"> de abajo.
+        3. Descomenta la línea <img> siguiente.
+        ══════════════════════════════════════════════════════
+      -->
+      <!-- <img src="foto1.jpg" alt="" loading="lazy"> -->
+      <div class="manifesto-bg-fallback"></div>
+    </div>
+    <div class="manifesto-overlay" aria-hidden="true"></div>
 
-Instagram
-421K+
+    <div class="manifesto-content container">
+      <div class="manifesto-line reveal"></div>
+      <blockquote>
+        <p class="manifesto-quote reveal">
+          <em>"Anímate, atrévete,</em><br>acompáñame y comparte"
+        </p>
+      </blockquote>
+      <p class="manifesto-sub reveal reveal-delay-1">
+        Este no es un gimnasio. Es un movimiento de mujeres que decidieron que los 60 son solo el comienzo.
+      </p>
+    </div>
+  </section>
 
-YouTube
-54K+
+  <!-- Sección redes movida a redes.html -->
 
-Facebook
-349K+
+  <!-- ======================================================
+       CTA FINAL
+  ====================================================== -->
+  <section class="cta-section" aria-label="Llamada a la acción">
+    <div class="cta-bg" aria-hidden="true"></div>
+    <div class="cta-content">
+      <h2 class="cta-title reveal"><span class="gradient-text">¿Lista</span> para empezar?</h2>
+      <p class="cta-text reveal reveal-delay-1">
+        Únete a miles de mujeres que ya decidieron moverse. Es gratis, es desde casa, y yo estoy contigo en cada paso.
+      </p>
+      <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener"
+         class="btn-cta-big reveal reveal-delay-2">
+        Sígueme y empieza hoy →
+      </a>
+    </div>
+  </section>
 
-TikTok
-40K+
+  <!-- ======================================================
+       FOOTER
+  ====================================================== -->
+  <footer class="footer" aria-label="Pie de página">
+    <a href="#inicio" class="footer-logo" aria-label="Volver al inicio">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="56" height="56">
+    </a>
 
-SCROLL
+    <nav class="footer-links" aria-label="Redes sociales">
+      <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@lananifitness" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/lananifitness" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@lananifitness" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      </a>
+    </nav>
 
-COMUNIDAD
-Una comunidad que crece cada día
+    <p class="footer-copy">© 2025 La Nani Fitness · Hecho con energía y propósito</p>
+  </footer>
 
+  <!-- Local GSAP + ScrollTrigger -->
+  <script defer src="lib/gsap.min.js?v=20260515"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260515"></script>
 
-421K+
-INSTAGRAM
+  <!-- Main — IIFE, no ES modules -->
+  <script defer>
+  (function () {
+    "use strict";
 
-54K+
-YOUTUBE
+    var $ = function (sel, scope) { return (scope || document).querySelector(sel); };
+    var $$ = function (sel, scope) { return Array.from((scope || document).querySelectorAll(sel)); };
+    var fineHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-349K+
-FACEBOOK
+    function safe(fn, name) {
+      try { fn(); } catch (e) { console.warn("[" + name + "]", e); }
+    }
 
-40K+
-TIKTOK
+    /* ── Mouse-reactive gradient ── */
+    function initMouseGradient() {
+      if (!fineHover) return;
+      document.addEventListener("mousemove", function (e) {
+        var x = (e.clientX / window.innerWidth * 100).toFixed(1) + "%";
+        var y = (e.clientY / window.innerHeight * 100).toFixed(1) + "%";
+        document.documentElement.style.setProperty("--mx", x);
+        document.documentElement.style.setProperty("--my", y);
+      }, { passive: true });
+    }
 
-64
-AÑOS Y CONTANDO
-MI HISTORIA
-Soy La Nani, y empecé a los 60
-Después de la pandemia decidí hacer algo con propósito. Busqué contenido de fitness para mujeres de mi edad... y no lo encontré. Así que lo creé yo.
-No soy entrenadora de élite. Soy una mujer de 64 años que decidió moverse, y que quiere que tú también lo hagas. Sin complicaciones, sin miedo, con alegría.
-64 años
-Fundadora
-Creadora de contenido
-+4 plataformas
-Mujeres de 60+
-LO QUE ENCONTRARÁS
-Sin excusas, desde casa
+    /* ── Custom cursor ── */
+    function initCursor() {
+      var root = $("[data-cursor-root]");
+      if (!root || !fineHover) return;
+      document.documentElement.classList.add("has-cursor");
+      var ring = $(".cursor-ring", root);
+      var dot  = $(".cursor-dot",  root);
+      var tx = 0, ty = 0, rx = 0, ry = 0, firstMove = false;
 
-🏠
-Rutinas en casa
-Sin gym, sin equipamiento especial. Solo tú, tus ganas y el espacio que tienes. Todo diseñado para hacerse en el salón.
-🌱
-Para empezar desde cero
-Si llevas años sin moverte, este es tu lugar. Empezamos despacio, sin prisa, adaptando cada ejercicio a tu ritmo.
-🤝
-Una compañera, no una jefa
-Hago contigo lo que te pido que hagas. No soy fría, no juzgo. Soy tu compañera con 64 años de experiencia vivida.
+      window.addEventListener("mousemove", function (e) {
+        tx = e.clientX; ty = e.clientY;
+        if (dot) dot.style.transform = "translate3d(" + tx + "px," + ty + "px,0)";
+        if (!firstMove) {
+          firstMove = true; rx = tx; ry = ty;
+          if (ring) ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+          root.classList.add("is-ready");
+        }
+      }, { passive: true });
 
+      (function tick() {
+        rx += (tx - rx) * 0.18;
+        ry += (ty - ry) * 0.18;
+        if (ring) ring.style.transform = "translate3d(" + rx.toFixed(1) + "px," + ry.toFixed(1) + "px,0)";
+        requestAnimationFrame(tick);
+      })();
 
+      var HOVER = "[data-tilt],.btn,.nav-cta,a[href],.social-card,.counter-card,.feature-card,.btn-cta-big";
+      document.addEventListener("mouseover", function (e) {
+        if (e.target.closest(HOVER)) root.classList.add("is-interactive");
+      });
+      document.addEventListener("mouseout", function (e) {
+        var rt = e.relatedTarget;
+        if (e.target.closest(HOVER) && !(rt && rt.closest && rt.closest(HOVER)))
+          root.classList.remove("is-interactive");
+      });
+    }
 
-"Anímate, atrévete, acompáñame y comparte"
-Este no es un gimnasio. Es un movimiento de mujeres que decidieron que los 60 son solo el comienzo.
+    /* ── Nav ── */
+    function initNav() {
+      var nav = $("#nav");
+      if (!nav) return;
+      function onScroll() { nav.classList.toggle("scrolled", window.scrollY > 40); }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
 
-¿Lista para empezar?
-Únete a miles de mujeres que ya decidieron moverse. Es gratis, es desde casa, y yo estoy contigo en cada paso.
-Sígueme y empieza hoy →
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        var id = a.getAttribute("href");
+        if (!id || id === "#") return;
+        var el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+      });
+    }
 
+    /* ── Hero initial reveal ── */
+    function initHeroReveal() {
+      setTimeout(function () {
+        var eyebrow  = $(".hero-eyebrow");
+        var title    = $("#hero-title");
+        if (eyebrow) eyebrow.classList.add("is-visible");
+        if (title)   title.classList.add("is-visible");
+        setTimeout(function () {
+          [$(".hero-subtitle"), $(".hero-desc"), $(".hero-slogan"), $(".hero-actions")]
+            .forEach(function (el) { if (el) el.classList.add("is-visible"); });
+        }, 200);
+      }, 280);
+    }
 
+    /* ── Scroll reveals (IntersectionObserver) ── */
+    function initReveals() {
+      var SEL = ".reveal,.reveal-left,.reveal-right,.section-header,.manifesto-line";
+      var els = $$(SEL);
+      if (!els.length) return;
 
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.04, rootMargin: "0px 0px -3% 0px" });
 
-© 2025 La Nani Fitness · Hecho con energía y propósito
+      els.forEach(function (el) { io.observe(el); });
+
+      /* 6-second safety net */
+      setTimeout(function () {
+        $$(SEL).forEach(function (el) {
+          if (!el.classList.contains("is-visible") &&
+              el.getBoundingClientRect().top < window.innerHeight * 1.1)
+            el.classList.add("is-visible");
+        });
+      }, 6000);
+    }
+
+    /* ── Count-up ── */
+    function initCounters() {
+      var counters = $$("[data-count-to]");
+      if (!counters.length) return;
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var el = e.target;
+          var target   = parseInt(el.dataset.countTo, 10);
+          var suffix   = el.dataset.suffix || "";
+          var duration = 1900;
+          var start    = performance.now();
+          io.unobserve(el);
+
+          function update(now) {
+            var progress = Math.min((now - start) / duration, 1);
+            var eased    = 1 - Math.pow(1 - progress, 3);
+            var value    = Math.floor(eased * target);
+            el.textContent = value >= 1000 ? (value / 1000).toFixed(0) + "K" + suffix : value + suffix;
+            if (progress < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach(function (el) { io.observe(el); });
+    }
+
+    /* ── 3D Tilt ── */
+    function initTilt() {
+      if (!fineHover) return;
+      $$("[data-tilt]").forEach(function (card) {
+        var MAX = 8;
+        var tRX = 0, tRY = 0, cRX = 0, cRY = 0, hover = false;
+
+        function tick() {
+          cRX += (tRX - cRX) * 0.12;
+          cRY += (tRY - cRY) * 0.12;
+          card.style.transform = "perspective(700px) rotateX(" + cRX.toFixed(2) + "deg) rotateY(" + cRY.toFixed(2) + "deg) translateZ(4px)";
+          if (hover || Math.abs(cRX) > 0.05 || Math.abs(cRY) > 0.05) requestAnimationFrame(tick);
+          else card.style.transform = "";
+        }
+
+        card.addEventListener("mouseover", function (e) {
+          if (!card.contains(e.relatedTarget)) { hover = true; tick(); }
+        });
+        card.addEventListener("mouseout", function (e) {
+          if (!card.contains(e.relatedTarget)) { hover = false; tRX = 0; tRY = 0; }
+        });
+        card.addEventListener("mousemove", function (e) {
+          var r  = card.getBoundingClientRect();
+          var cx = (e.clientX - r.left) / r.width  - 0.5;
+          var cy = (e.clientY - r.top)  / r.height - 0.5;
+          tRY = cx * MAX; tRX = -cy * MAX;
+        });
+      });
+    }
+
+    /* ── Particles ── */
+    function initParticles() {
+      var canvas = $("#particles-canvas");
+      if (!canvas) return;
+      var ctx  = canvas.getContext("2d");
+      var hero = $(".hero");
+      if (!hero) return;
+
+      function resize() { canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
+      resize();
+      window.addEventListener("resize", resize, { passive: true });
+
+      var COLS = ["rgba(232,65,122,","rgba(240,131,74,","rgba(201,169,110,"];
+      var particles = Array.from({ length: 48 }, function () { return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28 - 0.08,
+        a: Math.random() * 0.32 + 0.06,
+        c: COLS[Math.floor(Math.random() * COLS.length)]
+      }; });
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(function (p) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.c + p.a + ")";
+          ctx.fill();
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < -8) p.x = canvas.width + 8;
+          if (p.x > canvas.width + 8) p.x = -8;
+          if (p.y < -8) { p.y = canvas.height + 8; p.x = Math.random() * canvas.width; }
+          if (p.y > canvas.height + 8) p.y = -8;
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* ── Manifesto parallax ── */
+    function initManifestoParallax() {
+      var img = $(".manifesto-bg img");
+      if (!img) return;
+      var section = $(".manifesto-section");
+      function update() {
+        if (!section) return;
+        var rect = section.getBoundingClientRect();
+        var progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        img.style.transform = "translateY(" + ((progress - 0.5) * 70).toFixed(1) + "px) scale(1.14)";
+      }
+      window.addEventListener("scroll", update, { passive: true });
+      update();
+    }
+
+    /* ── GSAP extras (optional enrichment) ── */
+    function initGSAP() {
+      if (!window.gsap || !window.ScrollTrigger) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* Subtle hero content parallax on scroll */
+      gsap.to(".hero-content", {
+        yPercent: -7, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+      });
+    }
+
+    /* ── Boot ── */
+    function boot() {
+      safe(initMouseGradient,     "initMouseGradient");
+      safe(initCursor,            "initCursor");
+      safe(initNav,               "initNav");
+      safe(initHeroReveal,        "initHeroReveal");
+      safe(initReveals,           "initReveals");
+      safe(initCounters,          "initCounters");
+      safe(initTilt,              "initTilt");
+      safe(initParticles,         "initParticles");
+      safe(initManifestoParallax, "initManifestoParallax");
+      if (window.gsap && window.ScrollTrigger) safe(initGSAP, "initGSAP");
+      document.documentElement.classList.add("is-ready");
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+    else boot();
+
+  })();
+  </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis favoritos — La Nani Fitness</title>
+  <meta name="description" content="Los productos que uso en mis rutinas diarias. Mancuernas, esterillas, bandas elásticas y más. Los encuentras en Amazon, AliExpress y Temu." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* === Tokens === */
+    :root {
+      --bg:        #0A0A0F;
+      --surface:   #111118;
+      --surface-2: #1A1A24;
+      --rose:      #E8417A;
+      --orange:    #F0834A;
+      --text:      #F5F0E8;
+      --text-muted:#A09888;
+      --gold:      #C9A96E;
+      --line:      rgba(245, 240, 232, 0.1);
+      --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --gutter:    clamp(1.25rem, 5vw, 3rem);
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --script:    'Dancing Script', cursive;
+    }
+
+    /* === Reset === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }
+    img, svg { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { text-wrap: balance; font-family: var(--serif); line-height: 1.08; letter-spacing: -0.02em; }
+    ::selection { background: var(--rose); color: #fff; }
+    :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 4px; }
+    .reveal[data-split] { opacity: 1; transform: none; }
+
+    /* === Utilities === */
+    .container {
+      width: min(1200px, 100% - var(--gutter) * 2);
+      margin-inline: auto;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--rose) 0%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* === Custom cursor === */
+    .cursor { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; display: none; opacity: 0; transition: opacity .25s var(--ease-out); }
+    .cursor.is-ready { opacity: 1; }
+    @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
+    .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; pointer-events: none; will-change: transform; }
+    .cursor-dot { width: 6px; height: 6px; margin: -3px; background: var(--rose); border-radius: 50%; }
+    .cursor-ring { width: 36px; height: 36px; margin: -18px; border: 1.5px solid rgba(232,65,122,0.5); border-radius: 50%; transition: width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out), border-color .25s; }
+    .cursor.is-interactive .cursor-ring { width: 52px; height: 52px; margin: -26px; border-color: var(--rose); }
+    .has-cursor, .has-cursor a, .has-cursor button, .has-cursor [data-tilt] { cursor: none; }
+
+    /* === Nav === */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.25rem var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,10,15,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo img { height: 42px; width: 42px; object-fit: contain; border-radius: 50%; display: block; }
+    .nav-links { display: none; list-style: none; gap: 2rem; }
+    @media (min-width: 960px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em;
+      color: var(--text-muted);
+      transition: color .25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: linear-gradient(90deg, var(--rose), var(--orange));
+      transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text); }
+    .nav-links a.active::after { transform: scaleX(1); }
+    .btn-primary {
+      padding: .6rem 1.5rem; border-radius: 100px;
+      background: linear-gradient(135deg, var(--rose), var(--orange));
+      color: #fff; font-weight: 600; font-size: .875rem;
+      transition: opacity .2s, transform .2s var(--ease-out);
+    }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* === Page header === */
+    .page-header {
+      padding: 8rem var(--gutter) 4rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,65,122,0.12) 0%, transparent 70%);
+      border-bottom: 1px solid var(--line);
+    }
+    .page-header .eyebrow {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--rose);
+      margin-bottom: 1rem; display: block;
+    }
+    .page-header h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900; margin-bottom: 1.25rem;
+    }
+    .page-header p {
+      font-size: 1rem; color: var(--text-muted);
+      max-width: 50ch; margin: 0 auto;
+      line-height: 1.7;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: 0.85rem; color: var(--text-muted);
+      margin-bottom: 2rem;
+      transition: color .25s;
+    }
+    .back-link:hover { color: var(--rose); }
+    .back-link svg { width: 16px; height: 16px; }
+
+    /* === Section === */
+    .section { padding: 5rem 0; }
+
+    /* === Section header === */
+    .section-line {
+      display: block; width: 48px; height: 2px; margin: 1.25rem auto 0;
+      background: linear-gradient(90deg, var(--rose), var(--orange));
+      border-radius: 2px;
+    }
+
+    /* === Products grid === */
+    .products-grid {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 540px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .product-card {
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 20px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transform-style: preserve-3d; position: relative;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .product-card:hover {
+      border-color: rgba(232,65,122,0.4);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .product-img-wrap {
+      aspect-ratio: 4/3; overflow: hidden; position: relative;
+      background: var(--surface-2);
+    }
+    .product-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s var(--ease-out);
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+    .product-img-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, rgba(232,65,122,0.12) 0%, rgba(240,131,74,0.08) 100%);
+      border-bottom: 1px solid var(--line);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: .75rem;
+      text-align: center; padding: 1.5rem;
+    }
+    .product-img-placeholder .pp-icon { font-size: 2.8rem; opacity: 0.7; }
+    .product-img-placeholder .pp-label {
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose); opacity: 0.7; line-height: 1.5;
+    }
+    .product-body {
+      padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; flex: 1;
+    }
+    .product-badge {
+      display: inline-flex; align-items: center;
+      padding: .25rem .75rem; border-radius: 100px;
+      background: rgba(232,65,122,0.12); border: 1px solid rgba(232,65,122,0.2);
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--rose); width: fit-content;
+    }
+    .product-name {
+      font-family: var(--serif); font-size: 1.15rem; font-weight: 700; line-height: 1.2;
+    }
+    .product-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; flex: 1; }
+    .product-stores {
+      display: flex; flex-direction: column; gap: .6rem; margin-top: .25rem;
+    }
+    .store-btn {
+      display: flex; align-items: center; justify-content: center; gap: .6rem;
+      padding: .6rem 1rem; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600; text-decoration: none;
+      transition: opacity .2s, transform .2s var(--ease-out);
+      border: 1px solid transparent;
+    }
+    .store-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .store-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .store-btn.amazon  { background: #FF9900; color: #111; }
+    .store-btn.aliexpress { background: #E62E04; color: #fff; }
+    .store-btn.temu    { background: #FA5120; color: #fff; }
+
+    .products-note {
+      margin-top: 2.5rem; padding: 1.25rem 1.5rem;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 14px; border-left: 3px solid var(--rose);
+      font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;
+    }
+    .products-note strong { color: var(--text); }
+
+    /* === Reveal === */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* === Footer === */
+    .footer {
+      background: var(--surface); border-top: 1px solid var(--line);
+      padding: 2.5rem var(--gutter);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1.5rem; text-align: center;
+    }
+    @media (min-width: 720px) {
+      .footer { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+    .footer-logo { display: flex; align-items: center; }
+    .footer-logo img { height: 56px; width: 56px; object-fit: contain; border-radius: 50%; display: block; }
+    .footer-links { display: flex; gap: 1.25rem; }
+    .footer-links a {
+      display: flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface-2); border: 1px solid var(--line);
+      transition: border-color .25s, transform .25s;
+    }
+    .footer-links a:hover { border-color: var(--rose); transform: translateY(-2px); }
+    .footer-links svg { width: 16px; height: 16px; fill: var(--text-muted); transition: fill .25s; }
+    .footer-links a:hover svg { fill: var(--rose); }
+    .footer-copy { font-size: 0.8rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html" class="nav-logo" aria-label="La Nani Fitness — Inicio">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="42" height="42">
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#sobre">Sobre mí</a></li>
+      <li><a href="index.html#rutinas">Rutinas</a></li>
+      <li><a href="productos.html" class="active">Mis favoritos</a></li>
+      <li><a href="index.html#comunidad">Comunidad</a></li>
+      <li><a href="index.html#redes">Redes</a></li>
+    </ul>
+    <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" class="btn-primary" aria-label="Sígueme en Instagram">Sígueme</a>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Volver al inicio
+    </a>
+    <span class="eyebrow">Mis favoritos</span>
+    <h1><span class="gradient-text">Lo que yo uso</span> en casa</h1>
+    <p>Estos son los productos que forman parte de mi rutina diaria. Los he probado yo misma y los recomiendo de verdad. Encuéntralos en Amazon, AliExpress o Temu.</p>
+  </header>
+
+  <!-- PRODUCTS SECTION -->
+  <main class="section">
+    <div class="container">
+
+      <div class="products-grid">
+
+        <!-- Producto 1 -->
+        <div class="product-card reveal" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              IMAGEN PRODUCTO 1: descomenta y pon la ruta local
+              <img src="producto1.jpg" alt="Mancuernas de espuma" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">🏋️</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto1.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Fuerza</span>
+            <h3 class="product-name">Mancuernas de espuma</h3>
+            <p class="product-desc">Ligeras, seguras y perfectas para empezar. Las uso en casi todas mis rutinas. Sin riesgo de golpes, ideales para casa.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 2 -->
+        <div class="product-card reveal reveal-delay-1" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              <img src="producto2.jpg" alt="Esterilla de yoga antideslizante" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">🧘</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto2.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Base</span>
+            <h3 class="product-name">Esterilla antideslizante</h3>
+            <p class="product-desc">Gruesa y cómoda para los ejercicios en el suelo. Protege las rodillas y las muñecas. La mía tiene ya dos años y sigue perfecta.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="product-card reveal reveal-delay-2" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              <img src="producto3.jpg" alt="Bandas elásticas de resistencia" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">💪</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto3.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Resistencia</span>
+            <h3 class="product-name">Bandas elásticas</h3>
+            <p class="product-desc">Superversátiles y fáciles de guardar. Con distintos niveles de resistencia para ir progresando poco a poco sin forzar las articulaciones.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 4 -->
+        <div class="product-card reveal" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              <img src="producto4.jpg" alt="Botella térmica grande" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">💧</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto4.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Hidratación</span>
+            <h3 class="product-name">Botella térmica grande</h3>
+            <p class="product-desc">La misma que uso en mis videos. Mantiene el agua fría horas y me recuerda que debo hidratarme durante el ejercicio. Imprescindible.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 5 -->
+        <div class="product-card reveal reveal-delay-1" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              <img src="producto5.jpg" alt="Ropa deportiva cómoda" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">👟</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto5.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Ropa</span>
+            <h3 class="product-name">Ropa deportiva cómoda</h3>
+            <p class="product-desc">No hace falta gastar una fortuna. Busco telas transpirables, corte amplio y colores que den energía. Estas son mis favoritas para entrenar en casa.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 6 -->
+        <div class="product-card reveal reveal-delay-2" data-tilt>
+          <div class="product-img-wrap">
+            <!--
+              <img src="producto6.jpg" alt="Rodillo de masaje" loading="lazy">
+            -->
+            <div class="product-img-placeholder">
+              <span class="pp-icon">🌀</span>
+              <span class="pp-label">Imagen producto<br>Coloca producto6.jpg</span>
+            </div>
+          </div>
+          <div class="product-body">
+            <span class="product-badge">Recuperación</span>
+            <h3 class="product-name">Rodillo de masaje</h3>
+            <p class="product-desc">Para los días de después. Alivia la tensión muscular, activa la circulación y ayuda a recuperarse bien. Lo uso siempre que entreno piernas.</p>
+            <div class="product-stores">
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn amazon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39-.046.493.124.104.17.08.336-.07.496-.067.067-.336.286-.804.658-1.498 1.128-3.228 1.988-5.19 2.584a18.81 18.81 0 01-5.532.826c-4.164 0-7.932-1.065-11.304-3.194-.278-.167-.39-.34-.34-.52.05-.17.187-.256.48-.253zm21.704-5.02c-.16-.19-.346-.232-.558-.123l-2.133 1.036c-.19.094-.257.22-.205.377.41 1.228.615 2.235.615 3.024 0 .566-.085 1.02-.256 1.36a2.6 2.6 0 01-.72.905c-.1.09-.122.19-.067.3.056.11.15.155.285.135l2.22-.418c.284-.055.474-.19.57-.405.283-.64.424-1.406.424-2.297 0-.94-.092-1.794-.275-2.562z"/></svg>
+                Ver en Amazon
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn aliexpress">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.39 4.27c-.32.1-.46.48-.27.76l3.51 5.49-3.51 5.49c-.19.3-.04.67.27.76.1.03.2.02.3-.02l7.5-5.72c.23-.17.23-.52 0-.69l-7.5-5.72c-.1-.07-.2-.08-.3-.05zM5.5 9.5a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                Ver en AliExpress
+              </a>
+              <a href="#" target="_blank" rel="noopener sponsored" class="store-btn temu">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                Ver en Temu
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /products-grid -->
+
+      <div class="products-note reveal">
+        <strong>Nota:</strong> Algunos enlaces de esta sección son de afiliado. Si compras a través de ellos, yo recibo una pequeña comisión sin coste adicional para ti. Solo recomiendo productos que uso o que conozco de verdad.
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" aria-label="Pie de página">
+    <a href="index.html" class="footer-logo" aria-label="Volver al inicio">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="56" height="56">
+    </a>
+    <nav class="footer-links" aria-label="Redes sociales">
+      <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@lananifitness" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/lananifitness" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@lananifitness" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      </a>
+    </nav>
+    <p class="footer-copy">© 2025 La Nani Fitness · Hecho con energía y propósito</p>
+  </footer>
+
+  <script defer src="lib/gsap.min.js?v=20260515"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260515"></script>
+  <script defer>
+  (function () {
+    "use strict";
+    var fineHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    function safe(fn, name) {
+      try { fn(); } catch (e) { console.warn("[" + name + "]", e); }
+    }
+
+    /* Cursor */
+    function initCursor() {
+      if (!fineHover) return;
+      var cursor = document.getElementById("cursor");
+      var dot    = cursor.querySelector(".cursor-dot");
+      var ring   = cursor.querySelector(".cursor-ring");
+      var mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener("mousemove", function (e) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = "translate(" + mx + "px," + my + "px)";
+        cursor.classList.add("is-ready");
+      }, { passive: true });
+      (function loop() {
+        rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+        ring.style.transform = "translate(" + rx + "px," + ry + "px)";
+        requestAnimationFrame(loop);
+      })();
+      document.body.classList.add("has-cursor");
+      var HOVER = "a, button, [data-tilt], .store-btn";
+      document.querySelectorAll(HOVER).forEach(function (el) {
+        el.addEventListener("mouseenter", function () { cursor.classList.add("is-interactive"); });
+        el.addEventListener("mouseleave", function () { cursor.classList.remove("is-interactive"); });
+      });
+    }
+
+    /* Scroll reveal */
+    function initReveal() {
+      var els = Array.from(document.querySelectorAll(".reveal"));
+      if (!els.length) return;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.04, rootMargin: "0px 0px -40px 0px" });
+      els.forEach(function (el) { io.observe(el); });
+      setTimeout(function () {
+        els.forEach(function (el) { el.classList.add("is-visible"); });
+      }, 6000);
+    }
+
+    /* 3D Tilt */
+    function initTilt() {
+      if (!fineHover) return;
+      var cards = Array.from(document.querySelectorAll("[data-tilt]"));
+      cards.forEach(function (card) {
+        var tx = 0, ty = 0, raf = null;
+        card.addEventListener("mousemove", function (e) {
+          var r = card.getBoundingClientRect();
+          var nx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+          var ny = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+          tx = nx * 8; ty = -ny * 8;
+          if (!raf) raf = requestAnimationFrame(function apply() {
+            card.style.transform = "perspective(900px) rotateY(" + tx + "deg) rotateX(" + ty + "deg) scale(1.02)";
+            raf = null;
+          });
+        });
+        card.addEventListener("mouseleave", function () {
+          tx = 0; ty = 0;
+          card.style.transform = "";
+        });
+      });
+    }
+
+    safe(initCursor, "cursor");
+    safe(initReveal, "reveal");
+    safe(initTilt,   "tilt");
+  })();
+  </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redes sociales — La Nani Fitness</title>
+  <meta name="description" content="Sígueme en Instagram, YouTube, Facebook y TikTok. Más de 860K personas ya forman parte de la comunidad La Nani Fitness." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:#0A0A0F; --surface:#111118; --surface-2:#1A1A24;
+      --rose:#E8417A; --orange:#F0834A; --text:#F5F0E8;
+      --text-muted:#A09888; --gold:#C9A96E; --line:rgba(245,240,232,0.1);
+      --ease-out:cubic-bezier(0.16,1,0.3,1); --ease-soft:cubic-bezier(0.25,0.46,0.45,0.94);
+      --gutter:clamp(1.25rem,5vw,3rem);
+      --serif:'Playfair Display',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;overflow-x:clip}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+    img,svg{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+    p{text-wrap:pretty}
+    h1,h2,h3{text-wrap:balance;font-family:var(--serif);line-height:1.08;letter-spacing:-0.02em}
+    ::selection{background:var(--rose);color:#fff}
+    :focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:4px}
+    .reveal[data-split]{opacity:1;transform:none}
+
+    .container{width:min(1200px,100% - var(--gutter)*2);margin-inline:auto}
+    .gradient-text{background:linear-gradient(135deg,var(--rose) 0%,var(--orange) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* Cursor */
+    .cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;display:none;opacity:0;transition:opacity .25s var(--ease-out)}
+    .cursor.is-ready{opacity:1}
+    @media(hover:hover)and(pointer:fine){.cursor{display:block}}
+    .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;will-change:transform}
+    .cursor-dot{width:6px;height:6px;margin:-3px;background:var(--rose);border-radius:50%}
+    .cursor-ring{width:36px;height:36px;margin:-18px;border:1.5px solid rgba(232,65,122,0.5);border-radius:50%;transition:width .35s var(--ease-out),height .35s var(--ease-out),margin .35s var(--ease-out),border-color .25s}
+    .cursor.is-interactive .cursor-ring{width:52px;height:52px;margin:-26px;border-color:var(--rose)}
+    .has-cursor,.has-cursor a,.has-cursor button,.has-cursor [data-tilt]{cursor:none}
+
+    /* Nav */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem var(--gutter);display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+    .nav-logo{display:flex;align-items:center}
+    .nav-logo img{height:42px;width:42px;object-fit:contain;border-radius:50%;display:block}
+    .nav-links{display:none;list-style:none;gap:2rem}
+    @media(min-width:960px){.nav-links{display:flex}}
+    .nav-links a{font-size:.875rem;font-weight:500;letter-spacing:.02em;color:var(--text-muted);transition:color .25s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--rose),var(--orange));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease-out)}
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+    .nav-links a.active{color:var(--text)}
+    .btn-primary{padding:.6rem 1.5rem;border-radius:100px;background:linear-gradient(135deg,var(--rose),var(--orange));color:#fff;font-weight:600;font-size:.875rem;transition:opacity .2s,transform .2s var(--ease-out)}
+    .btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+
+    /* Page header */
+    .page-header{padding:8rem var(--gutter) 4rem;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,65,122,0.12) 0%,transparent 70%);border-bottom:1px solid var(--line)}
+    .page-header .eyebrow{font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);margin-bottom:1rem;display:block}
+    .page-header h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;margin-bottom:1.25rem}
+    .page-header p{font-size:1rem;color:var(--text-muted);max-width:50ch;margin:0 auto;line-height:1.7}
+    .back-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--text-muted);margin-bottom:2rem;transition:color .25s}
+    .back-link:hover{color:var(--rose)}
+    .back-link svg{width:16px;height:16px}
+
+    /* Section */
+    .section{padding:5rem 0}
+
+    /* Social grid */
+    .social-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
+    @media(min-width:720px){.social-grid{grid-template-columns:repeat(4,1fr)}}
+    .social-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:1rem;transform-style:preserve-3d;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+    .social-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;border-radius:inherit}
+    .social-card.ig::before{background:linear-gradient(135deg,rgba(228,64,95,.09),rgba(245,96,64,.06))}
+    .social-card.yt::before{background:linear-gradient(135deg,rgba(255,0,0,.09),rgba(255,80,0,.05))}
+    .social-card.fb::before{background:linear-gradient(135deg,rgba(24,119,242,.1),rgba(0,90,200,.06))}
+    .social-card.tt::before{background:linear-gradient(135deg,rgba(105,201,208,.1),rgba(255,22,92,.07))}
+    .social-card:hover{border-color:rgba(232,65,122,0.45);box-shadow:0 12px 40px rgba(0,0,0,0.35)}
+    .social-card:hover::before{opacity:1}
+    .social-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .social-icon svg{width:20px;height:20px;fill:#fff}
+    .social-card.ig .social-icon{background:linear-gradient(135deg,#E4405F 0%,#F56040 50%,#FFDC80 100%)}
+    .social-card.yt .social-icon{background:#FF0000}
+    .social-card.fb .social-icon{background:#1877F2}
+    .social-card.tt .social-icon{background:linear-gradient(135deg,#010101 0%,#69C9D0 50%,#FF165C 100%)}
+    .social-name{font-size:.85rem;font-weight:500;color:var(--text-muted)}
+    .social-desc{font-size:.85rem;color:var(--text-muted);line-height:1.55;flex:1}
+    .social-handle{font-size:.9rem;font-weight:600;color:var(--rose)}
+    .social-handle::after{content:' →';transition:transform .25s;display:inline-block}
+    .social-card:hover .social-handle::after{transform:translateX(4px)}
+
+    /* Counters strip */
+    .counters-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:3rem}
+    @media(min-width:720px){.counters-strip{grid-template-columns:repeat(4,1fr)}}
+    .cs-item{background:var(--surface);padding:1.5rem 1rem;text-align:center}
+    .cs-num{font-family:var(--serif);font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--rose),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+    .cs-label{font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:.4rem}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+    .reveal.is-visible{opacity:1;transform:none}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.2s}
+    .reveal-delay-3{transition-delay:.3s}
+
+    /* Footer */
+    .footer{background:var(--surface);border-top:1px solid var(--line);padding:2.5rem var(--gutter);display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center}
+    @media(min-width:720px){.footer{flex-direction:row;justify-content:space-between;text-align:left}}
+    .footer-logo{display:flex;align-items:center}
+    .footer-logo img{height:56px;width:56px;object-fit:contain;border-radius:50%;display:block}
+    .footer-links{display:flex;gap:1.25rem}
+    .footer-links a{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);transition:border-color .25s,transform .25s}
+    .footer-links a:hover{border-color:var(--rose);transform:translateY(-2px)}
+    .footer-links svg{width:16px;height:16px;fill:var(--text-muted);transition:fill .25s}
+    .footer-links a:hover svg{fill:var(--rose)}
+    .footer-copy{font-size:.8rem;color:var(--text-muted)}
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+  </div>
+
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html" class="nav-logo" aria-label="La Nani Fitness — Inicio">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="42" height="42">
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#sobre">Sobre mí</a></li>
+      <li><a href="index.html#rutinas">Rutinas</a></li>
+      <li><a href="productos.html">Mis favoritos</a></li>
+      <li><a href="index.html#comunidad">Comunidad</a></li>
+      <li><a href="redes.html" class="active">Redes</a></li>
+    </ul>
+    <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" class="btn-primary">Sígueme</a>
+  </nav>
+
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Volver al inicio
+    </a>
+    <span class="eyebrow">Encuéntrame</span>
+    <h1><span class="gradient-text">Estoy en todas</span> las plataformas</h1>
+    <p>Más de 860.000 personas ya forman parte de nuestra comunidad. Únete en tu plataforma favorita.</p>
+  </header>
+
+  <main class="section">
+    <div class="container">
+
+      <!-- Counters strip -->
+      <div class="counters-strip reveal">
+        <div class="cs-item">
+          <div class="cs-num">421K+</div>
+          <div class="cs-label">Instagram</div>
+        </div>
+        <div class="cs-item">
+          <div class="cs-num">54K+</div>
+          <div class="cs-label">YouTube</div>
+        </div>
+        <div class="cs-item">
+          <div class="cs-num">349K+</div>
+          <div class="cs-label">Facebook</div>
+        </div>
+        <div class="cs-item">
+          <div class="cs-num">40K+</div>
+          <div class="cs-label">TikTok</div>
+        </div>
+      </div>
+
+      <!-- Social cards -->
+      <div class="social-grid">
+        <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener"
+           class="social-card ig reveal" data-tilt aria-label="Instagram de La Nani Fitness">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+          <p class="social-name">Instagram</p>
+          <p class="social-desc">Rutinas diarias, consejos de bienestar y la energía de nuestra comunidad.</p>
+          <span class="social-handle">@lananifitness</span>
+        </a>
+
+        <a href="https://www.youtube.com/@lananifitness" target="_blank" rel="noopener"
+           class="social-card yt reveal reveal-delay-1" data-tilt aria-label="YouTube de La Nani Fitness">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <p class="social-name">YouTube</p>
+          <p class="social-desc">Videos completos de rutinas, explicaciones detalladas y series semanales.</p>
+          <span class="social-handle">La Nani Fitness</span>
+        </a>
+
+        <a href="https://www.facebook.com/lananifitness" target="_blank" rel="noopener"
+           class="social-card fb reveal reveal-delay-2" data-tilt aria-label="Facebook de La Nani Fitness">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </div>
+          <p class="social-name">Facebook</p>
+          <p class="social-desc">Comunidad activa, grupos de apoyo y contenido para compartir en familia.</p>
+          <span class="social-handle">La Nani Fitness</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@lananifitness" target="_blank" rel="noopener"
+           class="social-card tt reveal reveal-delay-3" data-tilt aria-label="TikTok de La Nani Fitness">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </div>
+          <p class="social-name">TikTok</p>
+          <p class="social-desc">Rutinas cortas, momentos divertidos y el lado más espontáneo de La Nani.</p>
+          <span class="social-handle">@lananifitness</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <a href="index.html" class="footer-logo">
+      <img src="0DBBD92F-28AF-443F-B8DF-A923911F9726.png" alt="La Nani Fitness" width="56" height="56">
+    </a>
+    <nav class="footer-links">
+      <a href="https://www.instagram.com/lananifitness" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+      <a href="https://www.youtube.com/@lananifitness" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      <a href="https://www.facebook.com/lananifitness" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+      <a href="https://www.tiktok.com/@lananifitness" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+    </nav>
+    <p class="footer-copy">© 2025 La Nani Fitness · Hecho con energía y propósito</p>
+  </footer>
+
+  <script defer src="lib/gsap.min.js?v=20260515"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260515"></script>
+  <script defer>
+  (function(){
+    "use strict";
+    var fineHover = matchMedia("(hover:hover)and(pointer:fine)").matches;
+    function safe(fn,n){try{fn()}catch(e){console.warn("["+n+"]",e)}}
+
+    function initCursor(){
+      if(!fineHover)return;
+      var cursor=document.getElementById("cursor");
+      var dot=cursor.querySelector(".cursor-dot");
+      var ring=cursor.querySelector(".cursor-ring");
+      var mx=0,my=0,rx=0,ry=0;
+      document.addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY;dot.style.transform="translate("+mx+"px,"+my+"px)";cursor.classList.add("is-ready")},{passive:true});
+      (function loop(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.transform="translate("+rx+"px,"+ry+"px)";requestAnimationFrame(loop)})();
+      document.body.classList.add("has-cursor");
+      document.querySelectorAll("a,[data-tilt]").forEach(function(el){
+        el.addEventListener("mouseenter",function(){cursor.classList.add("is-interactive")});
+        el.addEventListener("mouseleave",function(){cursor.classList.remove("is-interactive")});
+      });
+    }
+
+    function initReveal(){
+      var els=Array.from(document.querySelectorAll(".reveal"));
+      if(!els.length)return;
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("is-visible");io.unobserve(e.target)}});
+      },{threshold:0.04,rootMargin:"0px 0px -40px 0px"});
+      els.forEach(function(el){io.observe(el)});
+      setTimeout(function(){els.forEach(function(el){el.classList.add("is-visible")})},6000);
+    }
+
+    function initTilt(){
+      if(!fineHover)return;
+      Array.from(document.querySelectorAll("[data-tilt]")).forEach(function(card){
+        var tx=0,ty=0,raf=null;
+        card.addEventListener("mousemove",function(e){
+          var r=card.getBoundingClientRect();
+          tx=((e.clientX-r.left)/r.width-.5)*16;ty=-((e.clientY-r.top)/r.height-.5)*16;
+          if(!raf)raf=requestAnimationFrame(function(){card.style.transform="perspective(900px) rotateY("+tx+"deg) rotateX("+ty+"deg) scale(1.02)";raf=null});
+        });
+        card.addEventListener("mouseleave",function(){tx=0;ty=0;card.style.transform=""});
+      });
+    }
+
+    safe(initCursor,"cursor");
+    safe(initReveal,"reveal");
+    safe(initTilt,"tilt");
+  })();
+  </script>
+</body>
+</html>
